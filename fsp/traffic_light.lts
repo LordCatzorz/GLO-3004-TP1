@@ -143,6 +143,20 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 11                                                   (10 points) */
+/*                                                                           */
+/* Spécifiez un processus _TEST5_ qui met en parallèle _TEST2_ et _TEST4_.   */
+/* Utilisez le renommage de certaines actions pour synchroniser les          */
+/* lumières. Ainsi les lumières est et ouest des deux intersections doivent  */
+/* êtres, rouges, vertes, clignotantes et jaunes en même temps. La même      */
+/* chose pour les lumières côté sud de l’intersection en T et nord et sud de */
+/* l’autre. Pour tester le progrès nous avons besoin de toutes les actions,  */
+/* sauf celles renommées différemment. Il ne devrait y avoir ni blocage ni   */
+/* violation de propriétés ni de violation de progrès                        */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 
 
 
