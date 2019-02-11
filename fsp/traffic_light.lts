@@ -37,6 +37,14 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 3 (2 points)                                                     */
+/*                                                                           */
+/* Spécifiez un processus Convoi qui représente le fonctionnement d’un       */
+/* processus voiture contraint par le processus OrdreVoiture                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 
 
 
