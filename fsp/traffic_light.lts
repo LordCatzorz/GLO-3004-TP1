@@ -45,6 +45,28 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 4 (3 points)                                                     */
+/*                                                                           */
+/* Spécifiez un processus _Convois1_ qui représente une composition          */
+/* parallèle de trois convois de voitures respectant l’ordre indiqué par la  */
+/* question 2. Ce processus représente l’ensemble des voitures à             */
+/* l’intersection. Un des convois représente les voitures provenant de       */
+/* l’est, un autre celles provenant de l’ouest et finalement le 3ème celles  */
+/* provenant du sud. Les actions de chacun des processus doivent être        */
+/* préfixées par _est_, _ouest_ et _sud_.                                    */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 5 (5 points)                                                     */
+/*                                                                           */
+/* Spécifiez un processus _Pietons1_ qui représente le comportement des      */
+/* piétons. Un piéton peut effectuer les actions suivantes _arrivent1_,      */
+/* _attentePietons1_, _feuPietons1_ et _traversent1_. Évidemment, il faut    */
+/* penser à ne faire traverser les piétons que quand la lumière piétons est  */
+/* allumée et les faire attendre autrement.                                  */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 
