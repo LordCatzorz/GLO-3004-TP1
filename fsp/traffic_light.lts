@@ -13,35 +13,35 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 1 (5 points)                                                     */
 /*                                                                           */
-/* Donnez la spécification en FSP d’un processus VOITURE qui représente une  */
-/* voiture pouvant attendre à l’intersection, continuer, tourner à droite ou */
-/* tourner à gauche. Ce processus doit être cyclique permettant de modéliser */
-/* plusieurs voitures. Le processus VOITURE peut faire les actions           */
-/* suivantes, approche, attendV, continue, tourneDroite ou tourneGauche.     */
-/* Ces actions signifient ce que leurs noms suggèrent. L’action approche     */
-/* signifie qu’une voiture s’approche de l’intersection. Après chaque action */
-/* ce processus boucle sur lui même pour représenter le fait qu’une autre    */
-/* voiture pourrait arriver.                                                 */
+/* Donnez la spécification en FSP d’un processus _VOITURE_ qui représente    */
+/* une voiture pouvant attendre à l’intersection, continuer, tourner à       */
+/* droite ou tourner à gauche. Ce processus doit être cyclique permettant de */
+/* modéliser plusieurs voitures. Le processus _VOITURE_ peut faire les       */
+/* actions suivantes, _approche_, _attendV_, _continue_, _tourneDroite_ ou   */
+/* _tourneGauche_. Ces actions signifient ce que leurs noms suggèrent.       */
+/* L’action approche signifie qu’une voiture s’approche de l’intersection.   */
+/* Après chaque action ce processus boucle sur lui même pour représenter le  */
+/* fait qu’une autre voiture pourrait arriver.                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2 (5 points)                                                     */
 /*                                                                           */
-/* Donnez la spécification en FSP d’un processus OrdreVoiture qui précise    */
+/* Donnez la spécification en FSP d’un processus _OrdreVoiture_ qui précise  */
 /* qu’une voiture ne peut pas faire les actions de continuer, tourner à      */
-/* gauche ou tourner à droite avant d’avoir fait l’action approche ou bien   */
-/* approche suivie de attendV. Une fois que l’action approche a eu lieu, on  */
-/* peut au lieu de continuer ou de tourner effectuer une autre action        */
-/* approche ou bien effectuer l’action attendV                               */
+/* gauche ou tourner à droite avant d’avoir fait l’action _approche_ ou bien */
+/* _approche_ suivie de _attendV_. Une fois que l’action _approche_ a eu     */
+/* lieu, on peut au lieu de continuer ou de tourner effectuer une autre      */
+/* action _approche_ ou bien effectuer l’action _attendV_.                    */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3 (2 points)                                                     */
 /*                                                                           */
-/* Spécifiez un processus Convoi qui représente le fonctionnement d’un       */
-/* processus voiture contraint par le processus OrdreVoiture                 */
+/* Spécifiez un processus _Convoi_ qui représente le fonctionnement d’un     */
+/* processus voiture contraint par le processus _OrdreVoiture_.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
