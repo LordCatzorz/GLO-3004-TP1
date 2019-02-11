@@ -129,6 +129,20 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 10                                                   (25 points) */
+/*                                                                           */
+/* Faites toutes les étapes précédentes Q1 à Q9 mais pour l’autre            */
+/* intersection. Inspirez-vous de vos solutions, évidemment. Vos processus   */
+/* correspondant à ceux de la question 8, s’appelleeaient, pas               */
+/* obligatoirement, _TEST3_ et _TEST5_.                                      */
+/*                                                                           */
+/* Notez que pour tester les propriétés de progrès de ces derniers vous      */
+/* devez commenter les propriétés de progrès de l’intersection en T, et      */
+/* vice-versa.                                                               */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 
 
 
