@@ -99,6 +99,36 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 8 (5 points)                                                     */
+/*                                                                           */
+/* En vous inspirant des processus définis dans Q7, spécifiez des propriétés */
+/* permettant de vous assurer qu’il n’y aura pas de collision, ni            */
+/* voiture-voiture, ni voiture-piétons. Vérifiez votre système au moyen de   */
+/* ces propriétés et ce en le composant en parallèle avec les voitures       */
+/* venant des trois côtés, les piétons et les lumières. D’abord sans les     */
+/* processus de contrôle des lumières _TEST1_ puis avec ces processus        */
+/* _TEST2_. Faites un usage judicieux du renommage pour que les lumières     */
+/* fonctionnent correctement selon ce qui est décrit en Q5 et Q6. Ou bien    */
+/* nommez dès le début les actions de la façon désirée. Le processus _TEST1_ */
+/* pourrait provoquer du blocage et des violations des propriétés. Le        */
+/* processus _TEST2_ ne devrait pas provoquer de blocage ni de violation des */
+/* propriétés.                                                               */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 9  Progrès (5 points)                                            */
+/*                                                                           */
+/* Spécifiez des ensembles d’actions permettant de vérifier si les voitures  */
+/* et les piétons peuvent toujours traverser l’intersection dans la          */
+/* composition parallèle de la question précédente, _TEST2_, représentant le */
+/* système en entier. À vous de décider s’il faut spécifier des singletons   */
+/* ou non. Justifiez par une phrase de commentaire votre choix. Il ne doit   */
+/* pas y avoir violation de propriétés de progrès.                           */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 
 
 
