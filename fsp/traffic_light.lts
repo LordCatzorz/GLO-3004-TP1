@@ -25,6 +25,18 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 2 (5 points)                                                     */
+/*                                                                           */
+/* Donnez la spécification en FSP d’un processus OrdreVoiture qui précise    */
+/* qu’une voiture ne peut pas faire les actions de continuer, tourner à      */
+/* gauche ou tourner à droite avant d’avoir fait l’action approche ou bien   */
+/* approche suivie de attendV. Une fois que l’action approche a eu lieu, on  */
+/* peut au lieu de continuer ou de tourner effectuer une autre action        */
+/* approche ou bien effectuer l’action attendV                               */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 
 
 
