@@ -33,7 +33,7 @@
 /* gauche ou tourner à droite avant d’avoir fait l’action _approche_ ou bien */
 /* _approche_ suivie de _attendV_. Une fois que l’action _approche_ a eu     */
 /* lieu, on peut au lieu de continuer ou de tourner effectuer une autre      */
-/* action _approche_ ou bien effectuer l’action _attendV_.                    */
+/* action _approche_ ou bien effectuer l’action _attendV_.                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
@@ -76,7 +76,7 @@
 /* s’allument à chaque côté de l’intersection, _est_, _ouest_ et _sud_. La   */
 /* lumière _est_ est en face des voitures provenant de l’est et ainsi de     */
 /* suite.                                                                    */
-/*                                                                           */ 
+/*                                                                           */
 /* Les lumières fonctionnent de la façon suivante. Elles peuvent être toutes */
 /* rouges ainsi les piétons peuvent passer. Si la lumière est verte d’un     */
 /* côté les voitures peuvent aller tout droit ou tourner à droite, si les    */
@@ -88,6 +88,16 @@
 /* Donnez la définition d’un processus _Lumieres1_ qui spécifient comment    */
 /* les lumières doivent changer. Nommez les actions de façon significative.  */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 7 (20 points)                                                    */
+/*                                                                           */
+/* Spécifiez des processus contrôlant le passage des voitures selon les      */
+/* lumières. Un contrôlant les voitures provenant de l’est, un pour les      */
+/* voitures provenant de l’ouest et un pour les voitures provenant du sud.   */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 
 
 
