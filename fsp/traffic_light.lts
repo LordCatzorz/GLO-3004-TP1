@@ -11,7 +11,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 1 (5 points)                                                     */
+/* Question 1                                                     (5 points) */
 /*                                                                           */
 /* Donnez la spécification en FSP d’un processus _VOITURE_ qui représente    */
 /* une voiture pouvant attendre à l’intersection, continuer, tourner à       */
@@ -26,7 +26,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 2 (5 points)                                                     */
+/* Question 2                                                     (5 points) */
 /*                                                                           */
 /* Donnez la spécification en FSP d’un processus _OrdreVoiture_ qui précise  */
 /* qu’une voiture ne peut pas faire les actions de continuer, tourner à      */
@@ -38,7 +38,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 3 (2 points)                                                     */
+/* Question 3                                                     (2 points) */
 /*                                                                           */
 /* Spécifiez un processus _Convoi_ qui représente le fonctionnement d’un     */
 /* processus voiture contraint par le processus _OrdreVoiture_.              */
@@ -46,7 +46,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 4 (3 points)                                                     */
+/* Question 4                                                     (3 points) */
 /*                                                                           */
 /* Spécifiez un processus _Convois1_ qui représente une composition          */
 /* parallèle de trois convois de voitures respectant l’ordre indiqué par la  */
@@ -59,7 +59,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 5 (5 points)                                                     */
+/* Question 5                                                     (5 points) */
 /*                                                                           */
 /* Spécifiez un processus _Pietons1_ qui représente le comportement des      */
 /* piétons. Un piéton peut effectuer les actions suivantes _arrivent1_,      */
@@ -70,7 +70,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 6 (15 points)                                                    */
+/* Question 6                                                    (15 points) */
 /*                                                                           */
 /* Spécifiez un ou plusieurs processus qui précisent comment les lumières    */
 /* s’allument à chaque côté de l’intersection, _est_, _ouest_ et _sud_. La   */
@@ -91,7 +91,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 7 (20 points)                                                    */
+/* Question 7                                                    (20 points) */
 /*                                                                           */
 /* Spécifiez des processus contrôlant le passage des voitures selon les      */
 /* lumières. Un contrôlant les voitures provenant de l’est, un pour les      */
@@ -100,7 +100,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 8 (5 points)                                                     */
+/* Question 8                                                     (5 points) */
 /*                                                                           */
 /* En vous inspirant des processus définis dans Q7, spécifiez des propriétés */
 /* permettant de vous assurer qu’il n’y aura pas de collision, ni            */
@@ -118,7 +118,7 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 9  Progrès (5 points)                                            */
+/* Question 9                      Progrès                        (5 points) */
 /*                                                                           */
 /* Spécifiez des ensembles d’actions permettant de vérifier si les voitures  */
 /* et les piétons peuvent toujours traverser l’intersection dans la          */
