@@ -1,0 +1,32 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*                      GLO-3004    PROJET 1    ÉTAPE 1                      */
+/*                                                                           */
+/*                                 Équipe 11                                 */
+/*                                                                           */
+/*                     Mathieu Kirouac    999 999 999                        */
+/*               Michael Lévesque-Dion    999 999 999                        */
+/*                      Raphël Sylvain    111 124 564                        */
+/*                                                                           */
+/*                                 Hiver 2019                                */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 1 (5 points)                                                     */
+/*                                                                           */
+/* Donnez la spécification en FSP d’un processus VOITURE qui représente une  */
+/* voiture pouvant attendre à l’intersection, continuer, tourner à droite ou */
+/* tourner à gauche. Ce processus doit être cyclique permettant de modéliser */
+/* plusieurs voitures. Le processus VOITURE peut faire les actions           */
+/* suivantes, approche, attendV, continue, tourneDroite ou tourneGauche.     */
+/* Ces actions signifient ce que leurs noms suggèrent. L’action approche     */
+/* signifie qu’une voiture s’approche de l’intersection. Après chaque action */
+/* ce processus boucle sur lui même pour représenter le fait qu’une autre    */
+/* voiture pourrait arriver.                                                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+
+
+
+
+
