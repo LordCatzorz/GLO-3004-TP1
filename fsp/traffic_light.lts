@@ -23,7 +23,7 @@
 /* Après chaque action ce processus boucle sur lui même pour représenter le  */
 /* fait qu’une autre voiture pourrait arriver.                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-set ActionsVoiture = {approche, attendV, continue, tourneDroite, tourneGauche}
+set ActionsVoiture = {approche, attendV, continue, tourneGauche, tourneDroite}
 VOITURE = (ActionsVoiture -> VOITURE).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -36,6 +36,9 @@ VOITURE = (ActionsVoiture -> VOITURE).
 /* lieu, on peut au lieu de continuer ou de tourner effectuer une autre      */
 /* action _approche_ ou bien effectuer l’action _attendV_.                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+OrdreVoiture = ( approche -> VoitureProche ),
+VoitureProche = ( {approche, attendV} -> VoitureProche
+                | {continuer, tourneGauche, tourneDroite} -> OrdreVoiture ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
