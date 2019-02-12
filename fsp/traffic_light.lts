@@ -73,7 +73,7 @@ set Provenances = {est, ouest, sud}
 /* penser à ne faire traverser les piétons que quand la lumière piétons est  */
 /* allumée et les faire attendre autrement.                                  */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+Pietons1 = ( arrivent1 | attentePietons1 | feuPietons1 -> traversent1 ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (15 points) */
