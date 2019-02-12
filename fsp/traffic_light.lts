@@ -23,7 +23,8 @@
 /* Après chaque action ce processus boucle sur lui même pour représenter le  */
 /* fait qu’une autre voiture pourrait arriver.                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+set ActionsVoiture = {approche, attendV, continue, tourneDroite, tourneGauche}
+VOITURE = (ActionsVoiture -> VOITURE).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2                                                     (5 points) */
