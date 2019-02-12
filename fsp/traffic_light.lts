@@ -23,12 +23,13 @@
 /* Après chaque action ce processus boucle sur lui même pour représenter le  */
 /* fait qu’une autre voiture pourrait arriver.                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+set ActionsTraverseIntersection = {continue, tourneDroite, tourneGauche}
+set ActionsAvantIntersection = {approche, attendV}
+set ActionsVoiture = {ActionsAvantIntersection, ActionsTraverseIntersection}
 
-VOITURE = (approche -> VOITURE_ACTION),
-VOITURE_ACTION = ({attendV, continue, tourneDroite, tourneGauche} -> VOITURE).
+VOITURE = (ActionsVoiture -> VOITURE).
 
 ||Q1 = VOITURE.
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2                                                     (5 points) */
