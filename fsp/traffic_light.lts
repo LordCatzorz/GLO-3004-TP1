@@ -42,6 +42,13 @@ VOITURE = (ActionsVoiture -> VOITURE).
 /* action _approche_ ou bien effectuer l’action _attendV_.                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+OrdreVoiture = (approche -> VOITURE_APPROCHE),
+VOITURE_APPROCHE = (approche -> VOITURE_APPROCHE
+                    | attendV -> VOITURE_ATTEND
+                    | ActionsTraverseIntersection -> OrdreVoiture),
+VOITURE_ATTEND = (ActionsTraverseIntersection -> OrdreVoiture).
+
+||Q2 = OrdreVoiture.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3                                                     (2 points) */
