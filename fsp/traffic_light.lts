@@ -61,7 +61,8 @@ VoitureProche = ( {approche, attendV} -> VoitureProche
 /* provenant du sud. Les actions de chacun des processus doivent être        */
 /* préfixées par _est_, _ouest_ et _sud_.                                    */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+set Provenances = {est, ouest, sud}
+||Convois1 = ( Provenances:Convoi ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 5                                                     (5 points) */
