@@ -38,7 +38,7 @@ VOITURE = (ActionsVoiture -> VOITURE).
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 OrdreVoiture = ( approche -> VoitureProche ),
 VoitureProche = ( {approche, attendV} -> VoitureProche
-                | {continuer, tourneGauche, tourneDroite} -> OrdreVoiture ).
+                | {continue, tourneGauche, tourneDroite} -> OrdreVoiture ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -47,6 +47,7 @@ VoitureProche = ( {approche, attendV} -> VoitureProche
 /* Spécifiez un processus _Convoi_ qui représente le fonctionnement d’un     */
 /* processus voiture contraint par le processus _OrdreVoiture_.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+||Convoi = ( VOITURE || OrdreVoiture ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
