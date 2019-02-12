@@ -94,6 +94,11 @@ Pietons1 = ( arrivent1 | attentePietons1 | feuPietons1 -> traversent1 ).
 /* Donnez la définition d’un processus _Lumieres1_ qui spécifient comment    */
 /* les lumières doivent changer. Nommez les actions de façon significative.  */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+Lumieres1 = Rouges,
+Rouges = ( feuPietons1 -> VertEst ),
+VertEst = ( est.continue -> VertSud | est.tourneGauche -> VertSud ),
+VertSud = ( sud.tourneGauche -> VertOuest | sud.tourneDroite -> VertOuest ),
+VertOuest = ( ouest.continue -> Rouges | ouest.tourneDroite -> Rouges ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
