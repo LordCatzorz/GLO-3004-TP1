@@ -24,11 +24,6 @@
 /* fait qu’une autre voiture pourrait arriver.                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-VOITURE = (approche -> VOITURE_ACTION),
-VOITURE_ACTION = ({attendV, continue, tourneDroite, tourneGauche} -> VOITURE).
-
-||Q1 = VOITURE.
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2                                                     (5 points) */
