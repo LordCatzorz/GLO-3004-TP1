@@ -72,13 +72,21 @@ VOITURE_ATTEND = (ActionsTraverseIntersection -> OrdreVoiture).
 /* provenant du sud. Les actions de chacun des processus doivent être        */
 /* préfixées par _est_, _ouest_ et _sud_.                                    */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-set CardinaliteIntersection = {nord, est, ouest, sud}
-set CardinaliteIntersectionTN = {{CardinaliteIntersection}\{nord}}
-set CardinaliteIntersectionTS = {{CardinaliteIntersection}\{sud}}
-set CardinaliteIntersectionTE = {{CardinaliteIntersection}\{est}}
-set CardinaliteIntersectionTO = {{CardinaliteIntersection}\{ouest}}
 
-||Convois1 = ({CardinaliteIntersectionTN}:Convoi).
+range N_CardinaliteIntersection = 1..4
+set CardinaliteIntersection = {cardinalite[N_CardinaliteIntersection]}
+
+Intersection4Directions = ({CardinaliteIntersection}.{ActionsVoiture} -> Intersection4Directions).
+
+IntersectionDirectionBloque(CardinaliteBloque=1) = STOP + {cardinalite[CardinaliteBloque].{ActionsVoiture}}.
+
+||N_Intersection3Directions(CardinaliteBloque=1) = (Intersection4Directions || IntersectionDirectionBloque(CardinaliteBloque)).
+
+||Intersection3Directions(CardinaliteBloque=1) = (N_Intersection3Directions(1) || {CardinaliteIntersection}:Convoi)
+    /{nord/cardinalite[1], est/cardinalite[2], sud/cardinalite[3], ouest/cardinalite[4]}.
+
+
+||Convois1 = (Intersection3Directions(1)).
 
 ||Q4 = Convois1.
 
