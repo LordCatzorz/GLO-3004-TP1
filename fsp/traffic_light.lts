@@ -82,7 +82,7 @@ IntersectionDirectionBloque(CardinaliteBloque=1) = STOP + {cardinalite[Cardinali
 
 ||N_Intersection3Directions(CardinaliteBloque=1) = (Intersection4Directions || IntersectionDirectionBloque(CardinaliteBloque)).
 
-||Intersection3Directions(CardinaliteBloque=1) = (N_Intersection3Directions(1) || {CardinaliteIntersection}:Convoi)
+||Intersection3Directions(CardinaliteBloque=1) = (N_Intersection3Directions(CardinaliteBloque) || {CardinaliteIntersection}:Convoi)
     /{nord/cardinalite[1], est/cardinalite[2], sud/cardinalite[3], ouest/cardinalite[4]}.
 
 
