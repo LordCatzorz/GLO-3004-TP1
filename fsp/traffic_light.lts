@@ -57,9 +57,6 @@ VOITURE_ATTEND = (ActionsTraverseIntersection -> OrdreVoiture).
 /* processus voiture contraint par le processus _OrdreVoiture_.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-||Convoi = (VOITURE || OrdreVoiture).
-
-||Q3 = Convoi.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 4                                                     (3 points) */
