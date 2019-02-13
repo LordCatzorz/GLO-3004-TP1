@@ -75,6 +75,7 @@ VOITURE_ATTEND = (ActionsTraverseIntersection -> OrdreVoiture).
 
 ||Convois1 = ({est, ouest, sud}:Convoi).
 
+||Q4 = Convois1.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 5                                                     (5 points) */
