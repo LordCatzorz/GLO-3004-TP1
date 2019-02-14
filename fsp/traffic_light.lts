@@ -82,12 +82,12 @@ SUD = (
     | sud.rouge -> CONTROLE
 ) + {est.tourneGauche, ouest.tourneDroite, sud.continue}.
 
-||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION ).
+||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION2 ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (15 points) */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-property TEST1 = TRAVERSE,
+property PIETONS_OK = TRAVERSE,
 TRAVERSE = ( traverse -> TRAVERSE 
             | [Directions].vert -> STOP[1] ),
 STOP[lumieres:1..2] = (
@@ -95,21 +95,35 @@ STOP[lumieres:1..2] = (
     | when (lumieres == 2) [Directions].rouge -> STOP[lumieres-1]
     | when (lumieres == 1) [Directions].rouge -> TRAVERSE ). 
 
-||CHECK1 = ( INTERSECTION || TEST1 ).
+||TEST1 = ( INTERSECTION || PIETONS_OK ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 7                                                    (20 points) */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-property TEST_EST = ( est.vert -> {est.continue, est.tourneDroite} -> TEST_EST ).
-||CHECK_EST = ( INTERSECTION || TEST_EST ).
+// À réviser pour permettre plusieurs actions de suite.
+property EST_OK = ( est.vert -> {est.continue, est.tourneDroite} -> EST_OK ).
+property OUEST_OK = ( ouest.vert -> {ouest.continue, ouest.tourneGauche} -> OUEST_OK ).
+property SUD_OK = ( sud.vert -> {sud.tourneGauche, sud.tourneDroite} -> SUD_OK ).
+
+||TEST2 = ( INTERSECTION || EST_OK || OUEST_OK || SUD_OK ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 8                                                     (5 points) */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+progress PIETON_PEUT_TRAVERSER = { traverse }
+/* 
+    Ici il faudrait faire des singletons, sinon on pourrait avoir que est peut
+    seulement continuer et jamais tourner à droite, par exemple.
+*/
+progress EST_PEUT_AVANCER = { est.continue, est.tourneDroite }
+progress OUEST_PEUT_AVANCER = { ouest.continue, ouest.tourneGauche }
+progress SUD_PEUT_AVANCER = { sud.tourneGauche, sud.tourneDroite }
+
+|| TEST3 = ( INTERSECTION || PIETON_PEUT_TRAVERSER || EST_PEUT_AVANCER || OUEST_PEUT_AVANCER || SUD_PEUT_AVANCER ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 9                      Progrès                        (5 points) */
+/* Question 9                                                     (5 points) */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
