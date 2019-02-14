@@ -75,7 +75,19 @@ VERT = ( rouge -> ROUGE ).
 /* penser à ne faire traverser les piétons que quand la lumière piétons est  */
 /* allumée et les faire attendre autrement.                                  */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-CONTROLE_INTERSECTION = .
+const False = 0
+const True = 1
+range Bool = False..True
+CONTROLE_INTERSECTION = CONTROLE[False][False][False],
+CONTROLE[est:Bool][ouest:Bool][sud:Bool] = (
+    when (est == False && ouest == False && sud == False) traverse -> est.vert -> CONTROLE[True][ouest][sud] |
+    when (est == True && ouest == False && sud == False) est.continue -> est.rouge -> ouest.vert -> CONTROLE[False][True][sud] |
+    when (est == True && ouest == False && sud == False) est.tourneDroite -> est.rouge -> ouest.vert -> CONTROLE[False][True][sud] |
+    when (est == False && ouest == True && sud == False) ouest.continue -> ouest.rouge -> sud.vert -> CONTROLE[est][False][True] | 
+    when (est == False && ouest == True && sud == False) ouest.tourneGauche -> ouest.rouge -> sud.vert -> CONTROLE[est][False][True] | 
+    when (est == False && ouest == False && sud == True) sud.tourneGauche -> sud.rouge -> CONTROLE[est][ouest][False] | 
+    when (est == False && ouest == False && sud == True) sud.tourneDroite -> sud.rouge -> CONTROLE[est][ouest][False] 
+) + {est.tourneGauche, ouest.tourneDroite, sud.continue}.
 
 ||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION ).
 
@@ -98,11 +110,8 @@ CONTROLE_INTERSECTION = .
 /* Donnez la définition d’un processus _Lumieres1_ qui spécifient comment    */
 /* les lumières doivent changer. Nommez les actions de façon significative.  */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-Lumieres1 = Rouges,
-Rouges = ( feuPietons1 -> VertEst ),
-VertEst = ( est.continue -> VertSud | est.tourneGauche -> VertSud ),
-VertSud = ( sud.tourneGauche -> VertOuest | sud.tourneDroite -> VertOuest ),
-VertOuest = ( ouest.continue -> Rouges | ouest.tourneDroite -> Rouges ).
+property TEST1 = ( traverse -> TEST1 | [Directions].vert -> [Directions].rouge -> TEST1).
+||CHECK1 = ( INTERSECTION || TEST1 ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
