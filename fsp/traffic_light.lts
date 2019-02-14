@@ -46,7 +46,7 @@ set Directions = {est, ouest, sud}
 /* Spécifiez un processus _Convoi_ qui représente le fonctionnement d’un     */
 /* processus voiture contraint par le processus _OrdreVoiture_.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-||Convoi = ( VOITURE || OrdreVoiture ).
+PIETONS = ( traverse -> PIETONS ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
