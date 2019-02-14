@@ -60,8 +60,11 @@ PIETONS = ( traverse -> PIETONS ).
 /* provenant du sud. Les actions de chacun des processus doivent être        */
 /* préfixées par _est_, _ouest_ et _sud_.                                    */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-set Provenances = {est, ouest, sud}
-||Convois1 = ( Provenances:Convoi ).
+LUMIERE = ROUGE,
+ROUGE = ( vert -> VERT ),
+VERT = ( rouge -> ROUGE ).
+
+||LUMIERES = ( Directions:LUMIERE ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 5                                                     (5 points) */
