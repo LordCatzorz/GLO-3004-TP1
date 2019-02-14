@@ -67,6 +67,8 @@ property TEST1 = ( traverse -> TEST1 | [Directions].vert -> [Directions].rouge -
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 7                                                    (20 points) */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+property TEST_EST = ( est.vert -> {est.continue, est.tourneDroite} -> TEST_EST ).
+||CHECK_EST = ( INTERSECTION || TEST_EST ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
