@@ -24,7 +24,7 @@
 /* fait qu’une autre voiture pourrait arriver.                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 set ActionsVoiture = {continue, tourneGauche, tourneDroite}
-VOITURE = (ActionsVoiture -> VOITURE).
+VOITURE = ( ActionsVoiture -> VOITURE ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2                                                     (5 points) */
@@ -75,7 +75,9 @@ VERT = ( rouge -> ROUGE ).
 /* penser à ne faire traverser les piétons que quand la lumière piétons est  */
 /* allumée et les faire attendre autrement.                                  */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-Pietons1 = ( arrivent1 | attentePietons1 | feuPietons1 -> traversent1 ).
+CONTROLE_INTERSECTION = .
+
+||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (15 points) */
