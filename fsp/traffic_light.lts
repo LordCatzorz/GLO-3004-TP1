@@ -36,9 +36,8 @@ VOITURE = (ActionsVoiture -> VOITURE).
 /* lieu, on peut au lieu de continuer ou de tourner effectuer une autre      */
 /* action _approche_ ou bien effectuer l’action _attendV_.                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-OrdreVoiture = ( approche -> VoitureProche ),
-VoitureProche = ( {approche, attendV} -> VoitureProche
-                | {continue, tourneGauche, tourneDroite} -> OrdreVoiture ).
+set Directions = {est, ouest, sud}
+||VOITURES = ( Directions:VOITURE ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
