@@ -128,7 +128,7 @@ OUEST = (
 ),
 EST_OUEST = (
     {est.continue} -> EST_OUEST
-    | {ouest.continue} -> EST_OUEST
+    | {ouest.continue, ouest.tourneDroite} -> EST_OUEST
     | est.rouge -> OUEST 
     | ouest.rouge -> EST
 ),
@@ -161,6 +161,7 @@ STOP[lumieres:1..2] = (
 
 ||TEST1 = ( INTERSECTION || PIETONS_OK ).
 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 7                                                    (15 points) */
 /*                                                                           */
@@ -169,8 +170,14 @@ STOP[lumieres:1..2] = (
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 // À réviser pour permettre plusieurs actions de suite.
-property EST_OK = ( est.vert -> {est.continue, est.tourneDroite} -> EST_OK ).
-property OUEST_OK = ( ouest.vert -> {ouest.continue, ouest.tourneGauche} -> OUEST_OK ).
+property CONTROLE_EST = ( est.vert -> EST_OK ),
+    EST_OK = ( {est.continue, est.tourneGauche} -> EST_OK
+    | ouest.vert -> EST_OUEST_OK
+    | est.rouge -> CONTROLE_EST ),
+    EST_OUEST_OK = ( est.continue -> EST_OUEST_OK 
+    | ouest.rouge -> EST_OK 
+    | est.rouge -> OUEST_OK ).
+property OUEST_OK = ( ouest.vert -> {ouest.continue, ouest.tourneDroite} -> OUEST_OK ).
 property SUD_OK = ( sud.vert -> {sud.tourneGauche, sud.tourneDroite} -> SUD_OK ).
 
 ||TEST2 = ( INTERSECTION || EST_OK || OUEST_OK || SUD_OK ).
