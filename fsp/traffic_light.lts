@@ -3,7 +3,7 @@
 /*                                                                           */
 /*                                 Équipe 11                                 */
 /*                                                                           */
-/*                     Mathieu Kirouac    999 999 999                        */
+/*                     Mathieu Kirouac    111 069 000                        */
 /*               Michael Lévesque-Dion    111 090 297                        */
 /*                      Raphël Sylvain    111 124 564                        */
 /*                                                                           */
@@ -12,12 +12,27 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 1                                                     (5 points) */
+/*                                                                           */
+/* Donnez la spécification en FSP d’un processus _VOITURE_ qui représente    */
+/* une voiture à l’intersection, peut continuer, tourner à droite ou tourner */
+/* à gauche. Ce processus doit être cyclique permettant de modéliser         */
+/* plusieurs voitures, faire boucler le processus ne signifie pas que c’est  */
+/* la même voiture qui . Le processus _VOITURE_ peut faire les actions       */
+/* suivantes, _continue_, _tourneDroite_ ou _tourneGauche_. Ces actions      */
+/* signifient ce que leurs noms suggèrent. Après chaque action ce processus  */
+/* boucle sur lui même pour représenter le fait qu’une autre voiture         */
+/* pourrait arriver.                                                         */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 set ActionsVoiture = {continue, tourneGauche, tourneDroite}
 VOITURE = ( ActionsVoiture -> VOITURE ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 2                                                     (5 points) */
+/* Question 2                                                     (3 points) */
+/*                                                                           */
+/* Donnez la spécification en FSP d’un processus _VOITURES_ qui représente   */
+/* la mise en parallèle de 3 processus _VOITURE_ correspondant               */
+/* respectivement aux voitures venant de l’est, de l’ouest et du sud. Vous   */
+/* pouvez préfixer le processus _VOITURE_ par _est_, _ouest_ et _sud_.       */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 set Directions = {est, ouest, sud}
 ||VOITURES = ( Directions:VOITURE ).
@@ -25,12 +40,29 @@ set Directions = {est, ouest, sud}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3                                                     (2 points) */
+/*                                                                           */
+/* Spécifiez un processus _PIETONS_ qui représente le comportement des       */
+/* piétons. Un piéton peut effectuer une seule action _traverse_ puis boucle */
+/* sur lui-même                                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 PIETONS = ( traverse -> PIETONS ).
 
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 4                                                     (3 points) */
+/*                                                                           */
+/* Question 4                                                     (5 points) */
+/*                                                                           */
+/* Par souci de simplicité, nous supposons que les lumières peuvent être     */
+/* seulement rouge ou verte. Nous supposons que les lumières sont            */
+/* initialement toutes rouges. Chacune des lumières passe du rouge au vert   */
+/* et inversement.                                                           */
+/*                                                                           */
+/* Spécifiez un processus _LUMIERE_ qui fait passer une lumière du vert au   */
+/* rouge.                                                                    */
+/*                                                                           */
+/* Spécifiez un processus _LUMIERES_ qui représente la mise en parallèle de  */
+/* 3 processus _LUMIERE_ correspondant respectivement aux lumières face à    */
+/* l’est, à l’ouest et au sud. Vous pouvez préfixer le processus _LUMIERE_   */
+/* par _est_, _ouest_ et _sud_.                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 LUMIERE = ROUGE,
 ROUGE = ( vert -> VERT ),
@@ -38,8 +70,47 @@ VERT = ( rouge -> ROUGE ).
 
 ||LUMIERES = ( Directions:LUMIERE ).
 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 5                                                     (5 points) */
+/* Question 5                                                    (30 points) */
+/* Spécifiez des processus contrôlant le passage des voitures, des piétons   */
+/* et le changement des lumières. Les règles suivantes permettent de         */
+/* concevoir ce processus. Vous pouvez l’appeler _CONTROLE_INTERSECTION_     */
+/*                                                                           */
+/*   1. Les lumières sont toutes rouges au départ.                           */
+/*   2. Les piétons ne peuvent traverser que quand toutes les lumières sont  */
+/*      rouges.                                                              */
+/*   3. Les voitures provenant du sud ne peuvent pas continuer mais          */
+/*      seulement tourner à gauche ou tourner à droite.                      */
+/*   4. Les voitures provenant de l’est ne peuvent que continuer ou tourner  */
+/*      à gauche.                                                            */
+/*   5. Les voitures provenant de l’ouest ne peuvent que continuer ou        */
+/*      tourner à droite.                                                    */
+/*   6. Quand la lumière face à une voiture est verte et que toutes les      */
+/*      autres sont rouges, celle-ci peut continuer, tourner à droite ou     */
+/*      tourner à gauche si la configuration le permet.                      */
+/*   7. Quand la lumière face à une voiture est verte et que celle opposée   */
+/*      l’est aussi celle-ci peut continuer ou tourner à droite si la        */
+/*      configuration le permet.                                             */
+/*   8. On ne peut pas avoir deux lumières adjacentes, est et sud par        */
+/*      exemple, vertes en même temps.                                       */
+/*   9. On peut avoir deux lumières opposées, est et ouest, par exemple      */
+/*      vertes en même temps ou bien l’une verte et l’autre rouge.           */
+/*                                                                           */
+/* Utilisez les processus déjà spécifiés comme ceci :                        */
+/*   ||INTERSECTION = (LUMIERES || PIETONS ||                                */
+/*                     VOITURES || CONTROLE_INTERSECTION).                   */
+/*                                                                           */
+/* Vous n’êtes pas obligés de suivre l’indication suivante, si vous proposez */
+/* une solution plus élégante, je saurai apprécier. Indication :             */
+/* inspirez-vous de l’exemple du pont et utilisez des indices à un processus */
+/* local où la valeur d’un paramètre correspondrait à une lumière rouge ou   */
+/* verte. Regardez comment dans cet exemple on a défini une variable qui     */
+/* vaut True ou False. Notez que nous pouvons utiliser la conditionnelle     */
+/* when avec la même condition autant de fois qu’on veut.                    */
+/* Par exemple, when (v==0) a --> P1 when (v==0) b --> P2                    */
+/* Utilisez le _RUN_ pour vous assurer que tout fonctionne comme vous le     */
+/* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 const False = 0
 const True = 1
@@ -84,11 +155,17 @@ SUD = (
 
 ||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION2 ).
 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 6                                                    (15 points) */
+/* Question 6                                                    (10 points) */
+/*                                                                           */
+/* Pour vous assurer que le processus ||INTERSECTION ne met pas en danger    */
+/* les piétons, spécifiez une propriété que vous composerez avec             */
+/* ||INTERSECTION pour vous assurer que l’action _traverse_ ne sera jamais   */
+/* effectuée quand il y a au moins une lumière verte allumée. Spécifiez un   */
+/* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 property PIETONS_OK = TRAVERSE,
-TRAVERSE = ( traverse -> TRAVERSE 
             | [Directions].vert -> STOP[1] ),
 STOP[lumieres:1..2] = (
     when (lumieres < 2) [Directions].vert -> STOP[lumieres+1] 
@@ -97,20 +174,30 @@ STOP[lumieres:1..2] = (
 
 ||TEST1 = ( INTERSECTION || PIETONS_OK ).
 
+||TEST2 = ( INTERSECTION || EST_OK || OUEST_OK || SUD_OK ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 7                                                    (20 points) */
+/* Question 7                                                    (15 points) */
+/*                                                                           */
+/* Spécifiez 3 propriétés une par côté de l’intersection servant à garantir  */
+/* l’absence de collision.                                                   */
+/* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 // À réviser pour permettre plusieurs actions de suite.
 property EST_OK = ( est.vert -> {est.continue, est.tourneDroite} -> EST_OK ).
 property OUEST_OK = ( ouest.vert -> {ouest.continue, ouest.tourneGauche} -> OUEST_OK ).
 property SUD_OK = ( sud.vert -> {sud.tourneGauche, sud.tourneDroite} -> SUD_OK ).
 
-||TEST2 = ( INTERSECTION || EST_OK || OUEST_OK || SUD_OK ).
-
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 8                                                     (5 points) */
+/*                                                                           */
+/* Spécifiez des ensembles d’actions permettant de vérifier que les piétons  */
+/* peuvent toujours traverser l’intersection et que les voitures peuvent     */
+/* faire les actions prévues, dans la composition parallèle de la question   */
+/* précédente, _TEST2_, représentant le système en entier. À vous de décider */
+/* s’il faut spécifier des singletons ou non. Justifiez par une phrase de    */
+/* commentaire votre choix. Il ne doit pas y avoir violation de propriétés   */
+/* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 progress PIETON_PEUT_TRAVERSER = { traverse }
 /* 
@@ -125,5 +212,45 @@ progress SUD_PEUT_AVANCER = { sud.tourneGauche, sud.tourneDroite }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 9                                                     (5 points) */
+/* Question 9                                                    (15 points) */
+/*                                                                           */
+/* Faites toutes les étapes précédentes Q1 à Q8 mais pour l’autre            */
+/* intersection. Inspirez-vous de vos solutions, évidemment. Vos processus   */
+/* correspondant à ceux des questions Q6 et Q7, s’appelleraient, pas         */
+/* obligatoirement, _TEST3_ et _TEST4_.                                      */
+/*                                                                           */
+/* Notez que pour tester les propriétés de progrès de ces derniers vous      */
+/* devez commenter les propriétés de progrès de l’intersection en T, et      */
+/* vice-versa.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Question 10                                                   (10 points) */
+/*                                                                           */
+/* Spécifiez un processus _TEST5_ qui met en parallèle _TEST2_ et _TEST4_.   */
+/* Vous pouvez préfixer les processus de l’intersection en T par [1] et ceux */
+/* de l’autre par [2] pour maximiser la réutilisation. Vérifier les          */
+/* propriétés définies dans les questions précédentes ainsi que les          */
+/* propriétés de progrès. Utilisez le renommage de certaines actions pour    */
+/* synchroniser les lumières. Ainsi les lumières est et ouest des deux       */
+/* intersections doivent êtres, rouges ou vertes, en même temps. La même     */
+/* chose pour les lumières côté sud de l’intersection et sud en T et nord de */
+/* l’autre. Renommez aussi les actions montrant la continuité des            */
+/* intersections ainsi une voiture venant du nord de la deuxième             */
+/* intersection et qui tournerait à gauche serait une voiture qui continue   */
+/* en provenance de l’ouest pour l’intersection en T.                        */
+/*                                                                           */
+/* Pour tester le progrès nous avons besoin de toutes les actions servant à  */
+/* définir les propriétés précédentes sauf celles renommées différemment. Il */
+/* ne devrait y avoir ni blocage ni violation de propriétés ni de violation  */
+/* de progrès.                                                               */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+
+
+
+
+
+
