@@ -63,83 +63,89 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 5                                                     (5 points) */
+/* Question 5                                                    (30 points) */
 /*                                                                           */
-/* Spécifiez un processus _Pietons1_ qui représente le comportement des      */
-/* piétons. Un piéton peut effectuer les actions suivantes _arrivent1_,      */
-/* _attentePietons1_, _feuPietons1_ et _traversent1_. Évidemment, il faut    */
-/* penser à ne faire traverser les piétons que quand la lumière piétons est  */
-/* allumée et les faire attendre autrement.                                  */
+/* Spécifiez des processus contrôlant le passage des voitures, des piétons   */
+/* et le changement des lumières. Les règles suivantes permettent de         */
+/* concevoir ce processus. Vous pouvez l’appeler _CONTROLE_INTERSECTION_     */
+/*                                                                           */
+/*   1. Les lumières sont toutes rouges au départ.                           */
+/*   2. Les piétons ne peuvent traverser que quand toutes les lumières sont  */
+/*      rouges.                                                              */
+/*   3. Les voitures provenant du sud ne peuvent pas continuer mais          */
+/*      seulement tourner à gauche ou tourner à droite.                      */
+/*   4. Les voitures provenant de l’est ne peuvent que continuer ou tourner  */
+/*      à gauche.                                                            */
+/*   5. Les voitures provenant de l’ouest ne peuvent que continuer ou        */
+/*      tourner à droite.                                                    */
+/*   6. Quand la lumière face à une voiture est verte et que toutes les      */
+/*      autres sont rouges, celle-ci peut continuer, tourner à droite ou     */
+/*      tourner à gauche si la configuration le permet.                      */
+/*   7. Quand la lumière face à une voiture est verte et que celle opposée   */
+/*      l’est aussi celle-ci peut continuer ou tourner à droite si la        */
+/*      configuration le permet.                                             */
+/*   8. On ne peut pas avoir deux lumières adjacentes, est et sud par        */
+/*      exemple, vertes en même temps.                                       */
+/*   9. On peut avoir deux lumières opposées, est et ouest, par exemple      */
+/*      vertes en même temps ou bien l’une verte et l’autre rouge.           */
+/*                                                                           */
+/* Utilisez les processus déjà spécifiés comme ceci :                        */
+/*   ||INTERSECTION = (LUMIERES || PIETONS ||                                */
+/*                     VOITURES || CONTROLE_INTERSECTION).                   */
+/*                                                                           */
+/* Vous n’êtes pas obligés de suivre l’indication suivante, si vous proposez */
+/* une solution plus élégante, je saurai apprécier. Indication :             */
+/* inspirez-vous de l’exemple du pont et utilisez des indices à un processus */
+/* local où la valeur d’un paramètre correspondrait à une lumière rouge ou   */
+/* verte. Regardez comment dans cet exemple on a défini une variable qui     */
+/* vaut True ou False. Notez que nous pouvons utiliser la conditionnelle     */
+/* when avec la même condition autant de fois qu’on veut.                    */
+/* Par exemple, when (v==0) a --> P1 when (v==0) b --> P2                    */
+/* Utilisez le _RUN_ pour vous assurer que tout fonctionne comme vous le     */
+/* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 6                                                    (15 points) */
+/* Question 6                                                    (10 points) */
 /*                                                                           */
-/* Spécifiez un ou plusieurs processus qui précisent comment les lumières    */
-/* s’allument à chaque côté de l’intersection, _est_, _ouest_ et _sud_. La   */
-/* lumière _est_ est en face des voitures provenant de l’est et ainsi de     */
-/* suite.                                                                    */
-/*                                                                           */
-/* Les lumières fonctionnent de la façon suivante. Elles peuvent être toutes */
-/* rouges ainsi les piétons peuvent passer. Si la lumière est verte d’un     */
-/* côté les voitures peuvent aller tout droit ou tourner à droite, si les    */
-/* lumières sont toutes rouges sauf une verte, alors la couleur sera vert    */
-/* clignotant pour ce côté et si possible (à cause de l’intersection en T)   */
-/* la voiture du côté de cette lumière peut aller tout droit, tourner à      */
-/* droite, si possible, ou tourner à gauche, si possible.                    */
-/*                                                                           */
-/* Donnez la définition d’un processus _Lumieres1_ qui spécifient comment    */
-/* les lumières doivent changer. Nommez les actions de façon significative.  */
+/* Pour vous assurer que le processus ||INTERSECTION ne met pas en danger    */
+/* les piétons, spécifiez une propriété que vous composerez avec             */
+/* ||INTERSECTION pour vous assurer que l’action _traverse_ ne sera jamais   */
+/* effectuée quand il y a au moins une lumière verte allumée. Spécifiez un   */
+/* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 7                                                    (20 points) */
+/* Question 7                                                    (15 points) */
 /*                                                                           */
-/* Spécifiez des processus contrôlant le passage des voitures selon les      */
-/* lumières. Un contrôlant les voitures provenant de l’est, un pour les      */
-/* voitures provenant de l’ouest et un pour les voitures provenant du sud.   */
+/* Spécifiez 3 propriétés une par côté de l’intersection servant à garantir  */
+/* l’absence de collision.                                                   */
+/* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 8                                                     (5 points) */
 /*                                                                           */
-/* En vous inspirant des processus définis dans Q7, spécifiez des propriétés */
-/* permettant de vous assurer qu’il n’y aura pas de collision, ni            */
-/* voiture-voiture, ni voiture-piétons. Vérifiez votre système au moyen de   */
-/* ces propriétés et ce en le composant en parallèle avec les voitures       */
-/* venant des trois côtés, les piétons et les lumières. D’abord sans les     */
-/* processus de contrôle des lumières _TEST1_ puis avec ces processus        */
-/* _TEST2_. Faites un usage judicieux du renommage pour que les lumières     */
-/* fonctionnent correctement selon ce qui est décrit en Q5 et Q6. Ou bien    */
-/* nommez dès le début les actions de la façon désirée. Le processus _TEST1_ */
-/* pourrait provoquer du blocage et des violations des propriétés. Le        */
-/* processus _TEST2_ ne devrait pas provoquer de blocage ni de violation des */
-/* propriétés.                                                               */
+/* Spécifiez des ensembles d’actions permettant de vérifier que les piétons  */
+/* peuvent toujours traverser l’intersection et que les voitures peuvent     */
+/* faire les actions prévues, dans la composition parallèle de la question   */
+/* précédente, _TEST2_, représentant le système en entier. À vous de décider */
+/* s’il faut spécifier des singletons ou non. Justifiez par une phrase de    */
+/* commentaire votre choix. Il ne doit pas y avoir violation de propriétés   */
+/* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 9                      Progrès                        (5 points) */
+/* Question 9                                                    (15 points) */
 /*                                                                           */
-/* Spécifiez des ensembles d’actions permettant de vérifier si les voitures  */
-/* et les piétons peuvent toujours traverser l’intersection dans la          */
-/* composition parallèle de la question précédente, _TEST2_, représentant le */
-/* système en entier. À vous de décider s’il faut spécifier des singletons   */
-/* ou non. Justifiez par une phrase de commentaire votre choix. Il ne doit   */
-/* pas y avoir violation de propriétés de progrès.                           */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 10                                                   (25 points) */
-/*                                                                           */
-/* Faites toutes les étapes précédentes Q1 à Q9 mais pour l’autre            */
+/* Faites toutes les étapes précédentes Q1 à Q8 mais pour l’autre            */
 /* intersection. Inspirez-vous de vos solutions, évidemment. Vos processus   */
-/* correspondant à ceux de la question 8, s’appelleeaient, pas               */
-/* obligatoirement, _TEST3_ et _TEST5_.                                      */
+/* correspondant à ceux des questions Q6 et Q7, s’appelleraient, pas         */
+/* obligatoirement, _TEST3_ et _TEST4_.                                      */
 /*                                                                           */
 /* Notez que pour tester les propriétés de progrès de ces derniers vous      */
 /* devez commenter les propriétés de progrès de l’intersection en T, et      */
@@ -148,17 +154,28 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 11                                                   (10 points) */
+/* Question 10                                                   (10 points) */
 /*                                                                           */
 /* Spécifiez un processus _TEST5_ qui met en parallèle _TEST2_ et _TEST4_.   */
-/* Utilisez le renommage de certaines actions pour synchroniser les          */
-/* lumières. Ainsi les lumières est et ouest des deux intersections doivent  */
-/* êtres, rouges, vertes, clignotantes et jaunes en même temps. La même      */
-/* chose pour les lumières côté sud de l’intersection en T et nord et sud de */
-/* l’autre. Pour tester le progrès nous avons besoin de toutes les actions,  */
-/* sauf celles renommées différemment. Il ne devrait y avoir ni blocage ni   */
-/* violation de propriétés ni de violation de progrès                        */
+/* Vous pouvez préfixer les processus de l’intersection en T par [1] et ceux */
+/* de l’autre par [2] pour maximiser la réutilisation. Vérifier les          */
+/* propriétés définies dans les questions précédentes ainsi que les          */
+/* propriétés de progrès. Utilisez le renommage de certaines actions pour    */
+/* synchroniser les lumières. Ainsi les lumières est et ouest des deux       */
+/* intersections doivent êtres, rouges ou vertes, en même temps. La même     */
+/* chose pour les lumières côté sud de l’intersection et sud en T et nord de */
+/* l’autre. Renommez aussi les actions montrant la continuité des            */
+/* intersections ainsi une voiture venant du nord de la deuxième             */
+/* intersection et qui tournerait à gauche serait une voiture qui continue   */
+/* en provenance de l’ouest pour l’intersection en T.                        */
+/*                                                                           */
+/* Pour tester le progrès nous avons besoin de toutes les actions servant à  */
+/* définir les propriétés précédentes sauf celles renommées différemment. Il */
+/* ne devrait y avoir ni blocage ni violation de propriétés ni de violation  */
+/* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 
 
 
