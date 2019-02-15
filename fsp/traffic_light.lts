@@ -112,24 +112,9 @@ VERT = ( rouge -> ROUGE ).
 /* Utilisez le _RUN_ pour vous assurer que tout fonctionne comme vous le     */
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-const False = 0
-const True = 1
-range Bool = False..True
-
-// Round robin, pas de possibilité de Est et Ouest en même temps
-CONTROLE_INTERSECTION = CONTROLE[False][False][False],
-CONTROLE[est:Bool][ouest:Bool][sud:Bool] = (
-    when (est == False && ouest == False && sud == False) traverse -> est.vert -> CONTROLE[True][ouest][sud] |
-    when (est == True && ouest == False && sud == False) est.continue -> est.rouge -> ouest.vert -> CONTROLE[False][True][sud] |
-    when (est == True && ouest == False && sud == False) est.tourneDroite -> est.rouge -> ouest.vert -> CONTROLE[False][True][sud] |
-    when (est == False && ouest == True && sud == False) ouest.continue -> ouest.rouge -> sud.vert -> CONTROLE[est][False][True] | 
-    when (est == False && ouest == True && sud == False) ouest.tourneGauche -> ouest.rouge -> sud.vert -> CONTROLE[est][False][True] | 
-    when (est == False && ouest == False && sud == True) sud.tourneGauche -> sud.rouge -> CONTROLE[est][ouest][False] | 
-    when (est == False && ouest == False && sud == True) sud.tourneDroite -> sud.rouge -> CONTROLE[est][ouest][False] 
-) + {est.tourneGauche, ouest.tourneDroite, sud.continue}.
 
 // Modélisation avec plusieurs processus locaux
-CONTROLE_INTERSECTION2 = CONTROLE,
+CONTROLE_INTERSECTION = CONTROLE,
 CONTROLE = ( traverse -> ALLUMER_LUMIERE ),
 ALLUMER_LUMIERE = ( est.vert -> EST | ouest.vert -> OUEST | sud.vert -> SUD ),
 EST = (
@@ -153,7 +138,7 @@ SUD = (
     | sud.rouge -> CONTROLE
 ) + {est.tourneDroite, ouest.tourneGauche, sud.continue}.
 
-||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION2 ).
+||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -169,7 +154,6 @@ property PIETONS_OK = TRAVERSE,
 TRAVERSE = (
     traverse -> TRAVERSE
     | [Directions].vert -> STOP[1] ),
-)
 STOP[lumieres:1..2] = (
     when (lumieres < 2) [Directions].vert -> STOP[lumieres+1] 
     | when (lumieres == 2) [Directions].rouge -> STOP[lumieres-1]
