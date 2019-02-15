@@ -133,12 +133,12 @@ CONTROLE_INTERSECTION2 = CONTROLE,
 CONTROLE = ( traverse -> ALLUMER_LUMIERE ),
 ALLUMER_LUMIERE = ( est.vert -> EST | ouest.vert -> OUEST | sud.vert -> SUD ),
 EST = (
-    {est.continue, est.tourneDroite} -> EST
+    {est.continue, est.tourneGauche} -> EST
     | est.rouge -> CONTROLE 
     | ouest.vert -> EST_OUEST
 ),
 OUEST = (
-    {ouest.continue, ouest.tourneGauche} -> EST
+    {ouest.continue, ouest.tourneDroite} -> EST
     | ouest.rouge -> CONTROLE 
     | est.vert -> EST_OUEST
 ),
@@ -151,7 +151,7 @@ EST_OUEST = (
 SUD = (
     {sud.tourneGauche, sud.tourneDroite} -> SUD
     | sud.rouge -> CONTROLE
-) + {est.tourneGauche, ouest.tourneDroite, sud.continue}.
+) + {est.tourneDroite, ouest.tourneGauche, sud.continue}.
 
 ||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION2 ).
 
@@ -166,15 +166,17 @@ SUD = (
 /* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 property PIETONS_OK = TRAVERSE,
-            | [Directions].vert -> STOP[1] ),
+TRAVERSE = (
+    traverse -> TRAVERSE
+    | [Directions].vert -> STOP[1] ),
+)
 STOP[lumieres:1..2] = (
     when (lumieres < 2) [Directions].vert -> STOP[lumieres+1] 
     | when (lumieres == 2) [Directions].rouge -> STOP[lumieres-1]
-    | when (lumieres == 1) [Directions].rouge -> TRAVERSE ). 
+    | when (lumieres == 1) [Directions].rouge -> TRAVERSE
+). 
 
 ||TEST1 = ( INTERSECTION || PIETONS_OK ).
-
-||TEST2 = ( INTERSECTION || EST_OK || OUEST_OK || SUD_OK ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 7                                                    (15 points) */
@@ -187,6 +189,9 @@ STOP[lumieres:1..2] = (
 property EST_OK = ( est.vert -> {est.continue, est.tourneDroite} -> EST_OK ).
 property OUEST_OK = ( ouest.vert -> {ouest.continue, ouest.tourneGauche} -> OUEST_OK ).
 property SUD_OK = ( sud.vert -> {sud.tourneGauche, sud.tourneDroite} -> SUD_OK ).
+
+||TEST2 = ( INTERSECTION || EST_OK || OUEST_OK || SUD_OK ).
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 8                                                     (5 points) */
