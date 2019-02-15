@@ -73,6 +73,11 @@ PIETONS = (traverse -> PIETONS).
 /* par _est_, _ouest_ et _sud_.                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+LUMIERE = (rouge -> vert -> LUMIERE).
+
+||LUMIERES = (Directions:LUMIERE).
+
+||Q4 = LUMIERES.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 5                                                    (30 points) */
