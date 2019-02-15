@@ -23,7 +23,11 @@
 /* boucle sur lui même pour représenter le fait qu’une autre voiture         */
 /* pourrait arriver.                                                         */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+set ActionsVoiture = {continue, tourneDroite, tourneGauche}
 
+VOITURE = ({ActionsVoiture}->VOITURE).
+
+||Q1 = VOITURE.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2                                                     (3 points) */
@@ -34,6 +38,11 @@
 /* pouvez préfixer le processus _VOITURE_ par _est_, _ouest_ et _sud_.       */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+set Directions = {est, sud, ouest}
+
+||VOITURES = (Directions:VOITURE).
+
+||Q2 = VOITURES.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3                                                     (2 points) */
@@ -43,6 +52,9 @@
 /* sur lui-même                                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+PIETONS = (traverse -> PIETONS).
+
+||Q3 = PIETONS.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 4                                                     (5 points) */
