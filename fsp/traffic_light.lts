@@ -115,15 +115,14 @@ VERT = ( rouge -> ROUGE ).
 
 // Modélisation avec plusieurs processus locaux
 CONTROLE_INTERSECTION = CONTROLE,
-CONTROLE = ( traverse -> ALLUMER_LUMIERE ),
-ALLUMER_LUMIERE = ( est.vert -> EST | ouest.vert -> OUEST | sud.vert -> SUD ),
+CONTROLE = ( traverse -> CONTROLE | est.vert -> EST | ouest.vert -> OUEST | sud.vert -> SUD ),
 EST = (
     {est.continue, est.tourneGauche} -> EST
     | est.rouge -> CONTROLE 
     | ouest.vert -> EST_OUEST
 ),
 OUEST = (
-    {ouest.continue, ouest.tourneDroite} -> EST
+    {ouest.continue, ouest.tourneDroite} -> OUEST
     | ouest.rouge -> CONTROLE 
     | est.vert -> EST_OUEST
 ),
