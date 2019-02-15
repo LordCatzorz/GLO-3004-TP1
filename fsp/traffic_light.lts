@@ -14,47 +14,51 @@
 /* Question 1                                                     (5 points) */
 /*                                                                           */
 /* Donnez la spécification en FSP d’un processus _VOITURE_ qui représente    */
-/* une voiture pouvant attendre à l’intersection, continuer, tourner à       */
-/* droite ou tourner à gauche. Ce processus doit être cyclique permettant de */
-/* modéliser plusieurs voitures. Le processus _VOITURE_ peut faire les       */
-/* actions suivantes, _approche_, _attendV_, _continue_, _tourneDroite_ ou   */
-/* _tourneGauche_. Ces actions signifient ce que leurs noms suggèrent.       */
-/* L’action approche signifie qu’une voiture s’approche de l’intersection.   */
-/* Après chaque action ce processus boucle sur lui même pour représenter le  */
-/* fait qu’une autre voiture pourrait arriver.                               */
+/* une voiture à l’intersection, peut continuer, tourner à droite ou tourner */
+/* à gauche. Ce processus doit être cyclique permettant de modéliser         */
+/* plusieurs voitures, faire boucler le processus ne signifie pas que c’est  */
+/* la même voiture qui . Le processus _VOITURE_ peut faire les actions       */
+/* suivantes, _continue_, _tourneDroite_ ou _tourneGauche_. Ces actions      */
+/* signifient ce que leurs noms suggèrent. Après chaque action ce processus  */
+/* boucle sur lui même pour représenter le fait qu’une autre voiture         */
+/* pourrait arriver.                                                         */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 2                                                     (5 points) */
+/* Question 2                                                     (3 points) */
 /*                                                                           */
-/* Donnez la spécification en FSP d’un processus _OrdreVoiture_ qui précise  */
-/* qu’une voiture ne peut pas faire les actions de continuer, tourner à      */
-/* gauche ou tourner à droite avant d’avoir fait l’action _approche_ ou bien */
-/* _approche_ suivie de _attendV_. Une fois que l’action _approche_ a eu     */
-/* lieu, on peut au lieu de continuer ou de tourner effectuer une autre      */
-/* action _approche_ ou bien effectuer l’action _attendV_.                   */
+/* Donnez la spécification en FSP d’un processus _VOITURES_ qui représente   */
+/* la mise en parallèle de 3 processus _VOITURE_ correspondant               */
+/* respectivement aux voitures venant de l’est, de l’ouest et du sud. Vous   */
+/* pouvez préfixer le processus _VOITURE_ par _est_, _ouest_ et _sud_.       */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3                                                     (2 points) */
 /*                                                                           */
-/* Spécifiez un processus _Convoi_ qui représente le fonctionnement d’un     */
-/* processus voiture contraint par le processus _OrdreVoiture_.              */
+/* Spécifiez un processus _PIETONS_ qui représente le comportement des       */
+/* piétons. Un piéton peut effectuer une seule action _traverse_ puis boucle */
+/* sur lui-même                                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Question 4                                                     (3 points) */
+/* Question 4                                                     (5 points) */
 /*                                                                           */
-/* Spécifiez un processus _Convois1_ qui représente une composition          */
-/* parallèle de trois convois de voitures respectant l’ordre indiqué par la  */
-/* question 2. Ce processus représente l’ensemble des voitures à             */
-/* l’intersection. Un des convois représente les voitures provenant de       */
-/* l’est, un autre celles provenant de l’ouest et finalement le 3ème celles  */
-/* provenant du sud. Les actions de chacun des processus doivent être        */
-/* préfixées par _est_, _ouest_ et _sud_.                                    */
+/* Par souci de simplicité, nous supposons que les lumières peuvent être     */
+/* seulement rouge ou verte. Nous supposons que les lumières sont            */
+/* initialement toutes rouges. Chacune des lumières passe du rouge au vert   */
+/* et inversement.                                                           */
+/*                                                                           */
+/* Spécifiez un processus _LUMIERE_ qui fait passer une lumière du vert au   */
+/* rouge.                                                                    */
+/*                                                                           */
+/* Spécifiez un processus _LUMIERES_ qui représente la mise en parallèle de  */
+/* 3 processus _LUMIERE_ correspondant respectivement aux lumières face à    */
+/* l’est, à l’ouest et au sud. Vous pouvez préfixer le processus _LUMIERE_   */
+/* par _est_, _ouest_ et _sud_.                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
