@@ -10,6 +10,17 @@
 /*                                 Hiver 2019                                */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+
+const CardinaliteBloqueDefaut = 1
+range N_Cardinalite = 1..4
+set Cardinalite = {cardinalite[N_Cardinalite]}
+set DescCardinalite = {nord, est, sud, ouest}
+set ActionsVoiture = {continue, tourneDroite, tourneGauche}
+set ActionsPieton = {traverse}
+set ActionsLumiere = {rouge, vert}
+set ActionsComplet = {ActionsLumiere, ActionsPieton, ActionsVoiture}
+
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 1                                                     (5 points) */
 /*                                                                           */
@@ -23,7 +34,6 @@
 /* boucle sur lui même pour représenter le fait qu’une autre voiture         */
 /* pourrait arriver.                                                         */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-set ActionsVoiture = {continue, tourneDroite, tourneGauche}
 
 VOITURE = ({ActionsVoiture}->VOITURE).
 
@@ -38,9 +48,8 @@ VOITURE = ({ActionsVoiture}->VOITURE).
 /* pouvez préfixer le processus _VOITURE_ par _est_, _ouest_ et _sud_.       */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-set Directions = {est, sud, ouest}
-
-||VOITURES = (Directions:VOITURE).
+BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) = STOP+{cardinalite[CardinaliteBloque].{ActionsComplet}}.
+||VOITURES(CardinaliteBloque=CardinaliteBloqueDefaut) = (Cardinalite:VOITURE || BLOQUER_CARDINALITE(CardinaliteBloque))\{cardinalite[CardinaliteBloque]}.
 
 ||Q2 = VOITURES.
 
@@ -52,7 +61,7 @@ set Directions = {est, sud, ouest}
 /* sur lui-même                                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-PIETONS = (traverse -> PIETONS).
+PIETONS = (ActionsPieton -> PIETONS).
 
 ||Q3 = PIETONS.
 
@@ -73,9 +82,13 @@ PIETONS = (traverse -> PIETONS).
 /* par _est_, _ouest_ et _sud_.                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-LUMIERE = (rouge -> vert -> LUMIERE).
+LUMIERE = ROUGE,
+ROUGE = (vert -> VERT),
+VERT = (rouge -> ROUGE).
 
-||LUMIERES = (Directions:LUMIERE).
+||LUMIERES(CardinaliteBloque=CardinaliteBloqueDefaut) = 
+    (Cardinalite:LUMIERE || BLOQUER_CARDINALITE(CardinaliteBloque))
+    \{cardinalite[CardinaliteBloque]}.
 
 ||Q4 = LUMIERES.
 
