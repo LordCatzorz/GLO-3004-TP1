@@ -150,7 +150,7 @@ CONTROLE_INTERSECTION(Car=1) = CONTROLE_INTERSECTION[0],
 CONTROLE_INTERSECTION[cl: COD_Lum] = 
     (cardinalite[i: N_Cardinalite].vert ->  if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLE_INTERSECTION[cl + (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
     |cardinalite[i: N_Cardinalite].rouge -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLE_INTERSECTION[cl - (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
-    |when (cl == (1<<(Car-1))) cardinalite[((Car+MaxCadinalite)%MaxCadinalite)].tourneGauche -> CONTROLE_INTERSECTION[cl]
+    |when (cl == (1<<(Car-1))) cardinalite[((Car+MaxCadinalite)%MaxCadinalite)].tourneGauche -> CONTROLE_INTERSECTION[cl] // tourneAGauche si seul feu d'activé
     ).
 
 ||P_CI =
