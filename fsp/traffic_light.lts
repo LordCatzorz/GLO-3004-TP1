@@ -141,12 +141,30 @@ VERT = (rouge -> ROUGE).
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+const ROUGE = 0
+const VERT = 1
+
+range EtatLum = ROUGE..VERT
+
 CONTROLE_INTERSECTION = CONTROLE_INTERSECTION[0],
 CONTROLE_INTERSECTION[cl: COD_Lum] = 
-    (cardinalite[i: N_Cardinalite].vert -> b[cl][(cl >> (i-1))%2][cl + (1 << (i - 1))] -> if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLE_INTERSECTION[cl + (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
-    |cardinalite[i: N_Cardinalite].rouge -> c[cl][(cl >> (i-1))%2][cl - (1 << (i - 1))] -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLE_INTERSECTION[cl - (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
+    (cardinalite[i: N_Cardinalite].vert ->  if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLE_INTERSECTION[cl + (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
+    |cardinalite[i: N_Cardinalite].rouge -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLE_INTERSECTION[cl - (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
     ).
-||A = CONTROLE_INTERSECTION.
+
+
+ALTERNE_LUMIERE(Car=1) = ALTERNE_LUMIERE[ROUGE],
+
+ALTERNE_LUMIERE[el: EtatLum] = 
+    (when (el == ROUGE) cardinalite[Car].vert -> ALTERNE_LUMIERE[VERT]
+    |when (el == VERT) cardinalite[Car].rouge -> ALTERNE_LUMIERE[ROUGE]
+    ).
+
+||P_AL =
+    forall [i:N_Cardinalite]
+    (ALTERNE_LUMIERE(i)).
+
+||A = (CONTROLE_INTERSECTION || P_AL).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (10 points) */
