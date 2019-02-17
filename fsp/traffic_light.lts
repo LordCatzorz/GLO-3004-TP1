@@ -51,7 +51,7 @@ VOITURE = ({ActionsVoiture}->VOITURE).
 BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) = STOP+{cardinalite[CardinaliteBloque].{ActionsComplet}}.
 ||VOITURES(CardinaliteBloque=CardinaliteBloqueDefaut) = (Cardinalite:VOITURE || BLOQUER_CARDINALITE(CardinaliteBloque))\{cardinalite[CardinaliteBloque]}.
 
-||Q2 = VOITURES.
+||Q2 = VOITURES/{nord/cardinalite[1],est/cardinalite[2],sud/cardinalite[3],ouest/cardinalite[4]}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3                                                     (2 points) */
@@ -90,7 +90,7 @@ VERT = (rouge -> ROUGE).
     (Cardinalite:LUMIERE || BLOQUER_CARDINALITE(CardinaliteBloque))
     \{cardinalite[CardinaliteBloque]}.
 
-||Q4 = LUMIERES.
+||Q4 = LUMIERES/{nord/cardinalite[1],est/cardinalite[2],sud/cardinalite[3],ouest/cardinalite[4]}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 5                                                    (30 points) */
