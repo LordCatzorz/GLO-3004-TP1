@@ -146,11 +146,17 @@ const VERT = 1
 
 range EtatLum = ROUGE..VERT
 
-CONTROLE_INTERSECTION = CONTROLE_INTERSECTION[0],
+CONTROLE_INTERSECTION(Car=1) = CONTROLE_INTERSECTION[0],
 CONTROLE_INTERSECTION[cl: COD_Lum] = 
     (cardinalite[i: N_Cardinalite].vert ->  if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLE_INTERSECTION[cl + (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
     |cardinalite[i: N_Cardinalite].rouge -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLE_INTERSECTION[cl - (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
+    |when (cl == (1<<(Car-1))) cardinalite[((Car+MaxCadinalite)%MaxCadinalite)].tourneGauche -> CONTROLE_INTERSECTION[cl]
     ).
+
+||P_CI =
+    forall [i:N_Cardinalite]
+    (CONTROLE_INTERSECTION(i)).
+
 
 
 ALTERNE_LUMIERE(Car=1) = ALTERNE_LUMIERE[ROUGE],
@@ -164,7 +170,7 @@ ALTERNE_LUMIERE[el: EtatLum] =
     forall [i:N_Cardinalite]
     (ALTERNE_LUMIERE(i)).
 
-||A = (CONTROLE_INTERSECTION || P_AL).
+||A = (P_CI || P_AL).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (10 points) */
