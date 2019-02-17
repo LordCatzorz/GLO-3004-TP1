@@ -14,7 +14,7 @@
 const CardinaliteBloqueDefaut = 1
 const MaxCadinalite = 4
 range N_Cardinalite = 1..MaxCadinalite
-range COD_Lum = 0..((2^MaxCadinalite) -1)
+range COD_Lum = 0..((1 << MaxCadinalite) -1)
 set Cardinalite = {cardinalite[N_Cardinalite]}
 set DescCardinalite = {nord, est, sud, ouest}
 set ActionsVoiture = {continue, tourneDroite, tourneGauche}
@@ -141,6 +141,12 @@ VERT = (rouge -> ROUGE).
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+CONTROLE_INTERSECTION = CONTROLE_INTERSECTION[0],
+CONTROLE_INTERSECTION[cl: COD_Lum] = 
+    (cardinalite[i: N_Cardinalite].vert -> b[cl][(cl >> (i-1))%2][cl + (1 << (i - 1))] -> if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLE_INTERSECTION[cl + (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
+    |cardinalite[i: N_Cardinalite].rouge -> c[cl][(cl >> (i-1))%2][cl - (1 << (i - 1))] -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLE_INTERSECTION[cl - (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
+    ).
+||A = CONTROLE_INTERSECTION.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (10 points) */
