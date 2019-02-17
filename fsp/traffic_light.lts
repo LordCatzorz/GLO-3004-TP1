@@ -12,7 +12,9 @@
 
 
 const CardinaliteBloqueDefaut = 1
-range N_Cardinalite = 1..4
+const MaxCadinalite = 4
+range N_Cardinalite = 1..MaxCadinalite
+range COD_Lum = 0..((2^MaxCadinalite) -1)
 set Cardinalite = {cardinalite[N_Cardinalite]}
 set DescCardinalite = {nord, est, sud, ouest}
 set ActionsVoiture = {continue, tourneDroite, tourneGauche}
@@ -37,7 +39,8 @@ set ActionsComplet = {ActionsLumiere, ActionsPieton, ActionsVoiture}
 
 VOITURE = ({ActionsVoiture}->VOITURE).
 
-||Q1 = VOITURE.
+||Q1 = VOITURE
+    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2                                                     (3 points) */
@@ -51,7 +54,8 @@ VOITURE = ({ActionsVoiture}->VOITURE).
 BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) = STOP+{cardinalite[CardinaliteBloque].{ActionsComplet}}.
 ||VOITURES(CardinaliteBloque=CardinaliteBloqueDefaut) = (Cardinalite:VOITURE || BLOQUER_CARDINALITE(CardinaliteBloque))\{cardinalite[CardinaliteBloque]}.
 
-||Q2 = VOITURES/{nord/cardinalite[1],est/cardinalite[2],sud/cardinalite[3],ouest/cardinalite[4]}.
+||Q2 = VOITURES
+    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3                                                     (2 points) */
@@ -63,7 +67,8 @@ BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) = STOP+{cardinali
 
 PIETONS = (ActionsPieton -> PIETONS).
 
-||Q3 = PIETONS.
+||Q3 = PIETONS
+    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 4                                                     (5 points) */
@@ -90,7 +95,8 @@ VERT = (rouge -> ROUGE).
     (Cardinalite:LUMIERE || BLOQUER_CARDINALITE(CardinaliteBloque))
     \{cardinalite[CardinaliteBloque]}.
 
-||Q4 = LUMIERES/{nord/cardinalite[1],est/cardinalite[2],sud/cardinalite[3],ouest/cardinalite[4]}.
+||Q4 = LUMIERES
+    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 5                                                    (30 points) */
