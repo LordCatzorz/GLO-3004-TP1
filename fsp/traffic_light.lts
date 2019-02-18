@@ -51,11 +51,25 @@ VOITURE = ({ActionsVoiture}->VOITURE).
 /* pouvez préfixer le processus _VOITURE_ par _est_, _ouest_ et _sud_.       */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) = STOP+{cardinalite[CardinaliteBloque].{ActionsComplet}}.
-||VOITURES(CardinaliteBloque=CardinaliteBloqueDefaut) = (Cardinalite:VOITURE || BLOQUER_CARDINALITE(CardinaliteBloque))\{cardinalite[CardinaliteBloque]}.
+BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) = 
+        STOP+{
+            // Bloquer les actions à partir de la cardinalité bloqué
+            cardinalite[CardinaliteBloque].{ActionsComplet}, 
+            // Bloquer les actions en direction de la cardinalité bloqué
+            cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+            cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+            cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche
+            }.
+||VOITURES(CardinaliteBloque=CardinaliteBloqueDefaut) = (Cardinalite:VOITURE || BLOQUER_CARDINALITE(CardinaliteBloque))
+    // Masquer les actions que nous avons bloqué
+    \{cardinalite[CardinaliteBloque],
+    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||Q2 = VOITURES
-    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
+    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]
+                                /cardinalite[i]}}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 3                                                     (2 points) */
