@@ -155,19 +155,14 @@ VERT = (rouge -> ROUGE).
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-const ROUGE = 0
-const VERT = 1
-
-range EtatLum = ROUGE..VERT
-
 // 1 << (Car - 1) = Tout les bits à 0 sauf celui en cours.
-
-
 
 CONTROLE_INTERSECTION(CardinaliteBloque=CardinaliteBloqueDefaut, Car=1) = CONTROLE_INTERSECTION[0],
 CONTROLE_INTERSECTION[cl: COD_Lum] = 
     (cardinalite[i: N_Cardinalite].vert ->  if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLE_INTERSECTION[cl + (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
     |cardinalite[i: N_Cardinalite].rouge -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLE_INTERSECTION[cl - (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
+    // Si tous désactivé, laisser piétons
+    |when (cl == 0) traverse -> CONTROLE_INTERSECTION[cl]
     // Si seul activé, alors toutes actions permises.
     |when ( (cl - (1<<(Car-1))) == 0) cardinalite[Car].{ActionsVoiture} -> CONTROLE_INTERSECTION[cl] 
     // Si lumières opposés activé seulement, alors continuer et tourner droite permise.
@@ -175,23 +170,15 @@ CONTROLE_INTERSECTION[cl: COD_Lum] =
     )
     \{cardinalite[CardinaliteBloque]}.
 
-||P_CI(CardinaliteBloque=CardinaliteBloqueDefaut) =
+||CONTROLE_INTERSECTIONS(CardinaliteBloque=CardinaliteBloqueDefaut) =
     forall [i:N_Cardinalite]
     (CONTROLE_INTERSECTION(CardinaliteBloque, i)).
 
-ALTERNE_LUMIERE(CardinaliteBloque=CardinaliteBloqueDefaut, Car=1) = ALTERNE_LUMIERE[ROUGE],
+||INTERSECTION = (CONTROLE_INTERSECTIONS || LUMIERES ||PIETONS ||VOITURES).
 
-ALTERNE_LUMIERE[el: EtatLum] = 
-    (when (el == ROUGE) cardinalite[Car].vert -> ALTERNE_LUMIERE[VERT]
-    |when (el == VERT) cardinalite[Car].rouge -> ALTERNE_LUMIERE[ROUGE]
-    )
-    \{cardinalite[CardinaliteBloque]}.
+||Q5 = INTERSECTION
+    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
 
-||P_AL(CardinaliteBloque=CardinaliteBloqueDefaut) =
-    forall [i:N_Cardinalite]
-    (ALTERNE_LUMIERE(CardinaliteBloque, i)).
-
-||A = (P_CI || LUMIERES ||PIETONS ||VOITURES).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (10 points) */
