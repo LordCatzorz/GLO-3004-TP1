@@ -11,7 +11,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
-const CardinaliteBloqueDefaut = 1
+const CardinaliteBloqueDefaut = 0
 const MaxCadinalite = 4
 range N_Cardinalite = 1..MaxCadinalite
 range COD_Lum = 0..((1 << MaxCadinalite) -1)
@@ -334,22 +334,22 @@ EST_OUEST_VERT =
 
 // Nous utiliser des singletons, car nous voulons que CHAQUE actions soient toujours réalisable.
 
-progress PIETONS_PEUT_TRAVERSE = {ActionsPieton}
+// progress PIETONS_PEUT_TRAVERSE = {ActionsPieton}
 
-progress EST_PEUT_TOURNE_GAUCHE = {est.tourneGauche}
-progress EST_PEUT_CONTINUE = {est.continue}
-progress EST_PEUT_VERT = {est.vert}
-progress EST_PEUT_ROUGE = {est.rouge}
+// progress EST_PEUT_TOURNE_GAUCHE = {est.tourneGauche}
+// progress EST_PEUT_CONTINUE = {est.continue}
+// progress EST_PEUT_VERT = {est.vert}
+// progress EST_PEUT_ROUGE = {est.rouge}
 
-progress OUEST_PEUT_TOURNE_DROITE= {ouest.tourneDroite}
-progress OUEST_PEUT_CONTINUE = {ouest.continue}
-progress OUEST_PEUT_VERT = {ouest.vert}
-progress OUEST_PEUT_ROUGE = {ouest.rouge}
+// progress OUEST_PEUT_TOURNE_DROITE= {ouest.tourneDroite}
+// progress OUEST_PEUT_CONTINUE = {ouest.continue}
+// progress OUEST_PEUT_VERT = {ouest.vert}
+// progress OUEST_PEUT_ROUGE = {ouest.rouge}
 
-progress SUD_PEUT_TOURNE_DROITE= {sud.tourneDroite}
-progress SUD_PEUT_TOURNE_GAUCHE = {sud.tourneGauche}
-progress SUD_PEUT_VERT = {sud.vert}
-progress SUD_PEUT_ROUGE = {sud.rouge}
+// progress SUD_PEUT_TOURNE_DROITE= {sud.tourneDroite}
+// progress SUD_PEUT_TOURNE_GAUCHE = {sud.tourneGauche}
+// progress SUD_PEUT_VERT = {sud.vert}
+// progress SUD_PEUT_ROUGE = {sud.rouge}
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -365,6 +365,107 @@ progress SUD_PEUT_ROUGE = {sud.rouge}
 /* vice-versa.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+
+progress PIETONS_PEUT_TRAVERSE = {ActionsPieton}
+
+progress NORD_PEUT_TOURNE_DROITE = {nord.tourneDroite}
+progress NORD_PEUT_TOURNE_GAUCHE = {nord.tourneGauche}
+progress NORD_PEUT_CONTINUE = {nord.continue}
+progress NORD_PEUT_VERT = {nord.vert}
+progress NORD_PEUT_ROUGE = {nord.rouge}
+
+progress EST_PEUT_TOURNE_DROITE = {est.tourneDroite}
+progress EST_PEUT_TOURNE_GAUCHE = {est.tourneGauche}
+progress EST_PEUT_CONTINUE = {est.continue}
+progress EST_PEUT_VERT = {est.vert}
+progress EST_PEUT_ROUGE = {est.rouge}
+
+progress SUD_PEUT_TOURNE_DROITE = {sud.tourneDroite}
+progress SUD_PEUT_TOURNE_GAUCHE = {sud.tourneGauche}
+progress SUD_PEUT_CONTINUE = {sud.continue}
+progress SUD_PEUT_VERT = {sud.vert}
+progress SUD_PEUT_ROUGE = {sud.rouge}
+
+progress OUEST_PEUT_TOURNE_DROITE = {ouest.tourneDroite}
+progress OUEST_PEUT_TOURNE_GAUCHE = {ouest.tourneGauche}
+progress OUEST_PEUT_CONTINUE = {ouest.continue}
+progress OUEST_PEUT_VERT = {ouest.vert}
+progress OUEST_PEUT_ROUGE = {ouest.rouge}
+
+
+
+property PIETON_OK = TRAVERSE,
+TRAVERSE = 
+    (traverse -> TRAVERSE
+    | DescCardinalite.vert -> FEU_VERT[1]
+    ),
+
+FEU_VERT[nbVert:1..MaxCadinalite] =
+    (when (nbVert < MaxCadinalite) DescCardinalite.vert -> FEU_VERT[nbVert+1]
+    |when (nbVert > 1) DescCardinalite.rouge -> FEU_VERT[nbVert-1]
+    |when (nbVert == 1) DescCardinalite.rouge -> PIETON_OK
+    ).
+
+property NS_OK = 
+    (nord.vert -> NORD_VERT
+    |est.vert -> EST_VERT
+    |sud.vert -> SUD_VERT
+    |ouest.vert -> OUEST_VERT),
+EST_VERT =
+    (est.rouge -> NS_OK
+    |ouest.vert -> EST_OUEST_VERT),
+OUEST_VERT = 
+    (ouest.rouge -> NS_OK
+    |est.vert -> EST_OUEST_VERT),
+EST_OUEST_VERT = 
+    (est.rouge -> OUEST_VERT
+    |ouest.rouge -> EST_VERT),
+NORD_VERT =
+    (nord.ActionsVoiture -> NORD_VERT
+    |nord.rouge -> NS_OK
+    |sud.vert -> NORD_SUD_VERT),
+SUD_VERT =
+    (sud.ActionsVoiture -> SUD_VERT
+    |sud.rouge -> NS_OK
+    |nord.vert -> NORD_SUD_VERT),
+NORD_SUD_VERT =
+    (nord.rouge -> SUD_VERT
+    |sud.rouge -> NORD_VERT
+    |{nord, sud}.{continue, tourneDroite} -> NORD_SUD_VERT).
+    
+property EO_OK = 
+    (ouest.vert -> OUEST_VERT
+    |nord.vert -> NORD_VERT
+    |est.vert -> EST_VERT
+    |sud.vert -> SUD_VERT),
+NORD_VERT =
+    (nord.rouge -> EO_OK
+    |sud.vert -> NORD_SUD_VERT),
+SUD_VERT = 
+    (sud.rouge -> EO_OK
+    |nord.vert -> NORD_SUD_VERT),
+NORD_SUD_VERT = 
+    (nord.rouge -> SUD_VERT
+    |sud.rouge -> NORD_VERT),
+OUEST_VERT =
+    (ouest.ActionsVoiture -> OUEST_VERT
+    |ouest.rouge -> EO_OK
+    |est.vert -> OUEST_EST_VERT),
+EST_VERT =
+    (est.ActionsVoiture -> EST_VERT
+    |est.rouge -> EO_OK
+    |ouest.vert -> OUEST_EST_VERT),
+OUEST_EST_VERT =
+    (ouest.rouge -> EST_VERT
+    |est.rouge -> OUEST_VERT
+    |{ouest, est}.{continue, tourneDroite} -> OUEST_EST_VERT).
+
+||CONTROLE_INTERSECTION_X= 
+    CONTROLE_INTERSECTION(0)
+    /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
+
+||TEST3 = (CONTROLE_INTERSECTION_X || PIETON_OK).
+||TEST4 = (CONTROLE_INTERSECTION_X || EO_OK || NS_OK).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 10                                                   (10 points) */
