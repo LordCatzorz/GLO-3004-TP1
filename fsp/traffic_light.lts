@@ -107,7 +107,10 @@ VERT = (rouge -> ROUGE).
 
 ||LUMIERES(CardinaliteBloque=CardinaliteBloqueDefaut) = 
     (Cardinalite:LUMIERE || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque]}.
+    \{cardinalite[CardinaliteBloque],
+    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||Q4 = LUMIERES(1)
     /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
@@ -173,7 +176,10 @@ EO[i:1..2] =
     
 ||BLOQUER_LUMIERES_ADJACENTES(CardinaliteBloque=CardinaliteBloqueDefaut) = 
     (LUMIERES(CardinaliteBloque)|| MUTEX_DIRECTION || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque]}.
+    \{cardinalite[CardinaliteBloque],
+    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 // 1 << (Car - 1) = Tout les bits à 0 sauf celui en cours.
 
@@ -192,14 +198,20 @@ CONTROLEUR_INTERSECTION[cl: COD_Lum] =
 ||CONTROLEUR_INTERSECTIONS(CardinaliteBloque=CardinaliteBloqueDefaut) =
     forall [i:N_Cardinalite]
     (CONTROLEUR_INTERSECTION(i) || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque]}.
+    \{cardinalite[CardinaliteBloque],
+    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||CONTROLE_INTERSECTION(CardinaliteBloque=CardinaliteBloqueDefaut) = 
     (CONTROLEUR_INTERSECTIONS(CardinaliteBloque) 
     || LUMIERES(CardinaliteBloque) || PIETONS 
     || VOITURES(CardinaliteBloque) || BLOQUER_LUMIERES_ADJACENTES(CardinaliteBloque) 
     || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque]}.
+    \{cardinalite[CardinaliteBloque],
+    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||CONTROLE_INTERSECTION_SAUF_NORD = 
     CONTROLE_INTERSECTION(1)
@@ -242,7 +254,6 @@ FEU_VERT[nbVert:1..MaxCadinalite] =
 /* l’absence de collision.                                                   */
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 property EST_OK = 
     (est.vert -> EST_VERT
     |ouest.vert -> OUEST_VERT
@@ -320,6 +331,25 @@ EST_OUEST_VERT =
 /* commentaire votre choix. Il ne doit pas y avoir violation de propriétés   */
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+// Nous utiliser des singletons, car nous voulons que CHAQUE actions soient toujours réalisable.
+
+progress PIETONS_PEUT_TRAVERSE = {ActionsPieton}
+
+progress EST_PEUT_TOURNE_GAUCHE = {est.tourneGauche}
+progress EST_PEUT_CONTINUE = {est.continue}
+progress EST_PEUT_VERT = {est.vert}
+progress EST_PEUT_ROUGE = {est.rouge}
+
+progress OUEST_PEUT_TOURNE_DROITE= {ouest.tourneDroite}
+progress OUEST_PEUT_CONTINUE = {ouest.continue}
+progress OUEST_PEUT_VERT = {ouest.vert}
+progress OUEST_PEUT_ROUGE = {ouest.rouge}
+
+progress SUD_PEUT_TOURNE_DROITE= {sud.tourneDroite}
+progress SUD_PEUT_TOURNE_GAUCHE = {sud.tourneGauche}
+progress SUD_PEUT_VERT = {sud.vert}
+progress SUD_PEUT_ROUGE = {sud.rouge}
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
