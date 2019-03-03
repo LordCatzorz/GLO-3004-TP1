@@ -67,7 +67,7 @@ BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) =
     cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
     cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
-||Q2 = VOITURES
+||Q2 = VOITURES(1)
     /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]
                                 /cardinalite[i]}}.
 
@@ -109,7 +109,7 @@ VERT = (rouge -> ROUGE).
     (Cardinalite:LUMIERE || BLOQUER_CARDINALITE(CardinaliteBloque))
     \{cardinalite[CardinaliteBloque]}.
 
-||Q4 = LUMIERES
+||Q4 = LUMIERES(1)
     /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -155,28 +155,47 @@ VERT = (rouge -> ROUGE).
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+set SET_NS = {cardinalite[1], cardinalite[3]}
+set SET_EO = {cardinalite[2], cardinalite[4]}
+
+MUTEX_DIRECTION = (SET_NS.vert -> NS[1]
+    |SET_EO.vert -> EO[1]),
+NS[i:1..2] = 
+    (when (i == 1) SET_NS.rouge -> MUTEX_DIRECTION
+    |when (i > 1) SET_NS.rouge -> NS[i-1]
+    |when (i < 2) SET_NS.vert -> NS[i+1]
+    ),
+EO[i:1..2] = 
+    (when (i == 1) SET_EO.rouge -> MUTEX_DIRECTION
+    |when (i > 1) SET_EO.rouge -> EO[i-1]
+    |when (i < 2) SET_EO.vert -> EO[i+1]
+    ).
+    
+||BLOQUER_LUMIERES_ADJACENTES = ( LUMIERES|| MUTEX_DIRECTION).
+
 // 1 << (Car - 1) = Tout les bits à 0 sauf celui en cours.
 
-CONTROLE_INTERSECTION(CardinaliteBloque=CardinaliteBloqueDefaut, Car=1) = CONTROLE_INTERSECTION[0],
-CONTROLE_INTERSECTION[cl: COD_Lum] = 
-    (cardinalite[i: N_Cardinalite].vert ->  if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLE_INTERSECTION[cl + (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
-    |cardinalite[i: N_Cardinalite].rouge -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLE_INTERSECTION[cl - (1 << (i - 1))] else CONTROLE_INTERSECTION[cl]
+CONTROLEUR_INTERSECTION(Car=1) = CONTROLEUR_INTERSECTION[0],
+CONTROLEUR_INTERSECTION[cl: COD_Lum] = 
+    (cardinalite[i: N_Cardinalite].vert ->  if (((cl >> (i-1))%2) == 0) /*estrouge*/ then CONTROLEUR_INTERSECTION[cl + (1 << (i - 1))] else CONTROLEUR_INTERSECTION[cl]
+    |cardinalite[i: N_Cardinalite].rouge -> if (((cl >> (i-1))%2) == 1) /*estvert*/ then CONTROLEUR_INTERSECTION[cl - (1 << (i - 1))] else CONTROLEUR_INTERSECTION[cl]
     // Si tous désactivé, laisser piétons
-    |when (cl == 0) traverse -> CONTROLE_INTERSECTION[cl]
+    |when (cl == 0) traverse -> CONTROLEUR_INTERSECTION[cl]
     // Si seul activé, alors toutes actions permises.
-    |when ( (cl - (1<<(Car-1))) == 0) cardinalite[Car].{ActionsVoiture} -> CONTROLE_INTERSECTION[cl] 
+    |when ( (cl - (1<<(Car-1))) == 0) cardinalite[Car].{ActionsVoiture} -> CONTROLEUR_INTERSECTION[cl] 
     // Si lumières opposés activé seulement, alors continuer et tourner droite permise.
-    |when ( ((cl - (1<<(Car-1))) - (1<<((((Car-1) + (MaxCadinalite/2)) % MaxCadinalite)))) == 0) cardinalite[Car].{continue, tourneDroite} -> CONTROLE_INTERSECTION[cl]
-    )
+    |when ( ((cl - (1<<(Car-1))) - (1<<((((Car-1) + (MaxCadinalite/2)) % MaxCadinalite)))) == 0) cardinalite[Car].{continue, tourneDroite} -> CONTROLEUR_INTERSECTION[cl]
+    ).
+
+||CONTROLEUR_INTERSECTIONS =
+    forall [i:N_Cardinalite]
+    (CONTROLEUR_INTERSECTION(i)).
+
+||CONTROLE_INTERSECTION(CardinaliteBloque=CardinaliteBloqueDefaut) = 
+    (CONTROLEUR_INTERSECTIONS || LUMIERES ||PIETONS || VOITURES || BLOQUER_LUMIERES_ADJACENTES || BLOQUER_CARDINALITE(CardinaliteBloque))
     \{cardinalite[CardinaliteBloque]}.
 
-||CONTROLE_INTERSECTIONS(CardinaliteBloque=CardinaliteBloqueDefaut) =
-    forall [i:N_Cardinalite]
-    (CONTROLE_INTERSECTION(CardinaliteBloque, i)).
-
-||INTERSECTION = (CONTROLE_INTERSECTIONS || LUMIERES ||PIETONS ||VOITURES).
-
-||Q5 = INTERSECTION
+||Q5 = CONTROLE_INTERSECTION(1)
     /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
 
 
