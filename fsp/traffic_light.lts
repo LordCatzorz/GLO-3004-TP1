@@ -243,6 +243,71 @@ FEU_VERT[nbVert:1..MaxCadinalite] =
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+property EST_OK = 
+    (est.vert -> EST_VERT
+    |ouest.vert -> OUEST_VERT
+    |sud.vert -> SUD_VERT),
+EST_VERT =
+    (ouest.vert -> EST_OUEST_VERT
+    |est.rouge -> EST_OK
+    |est.{tourneGauche, continue} -> EST_VERT
+    ),
+OUEST_VERT =
+    (ouest.rouge -> EST_OK
+    |est.vert -> EST_OUEST_VERT
+    ),
+SUD_VERT =
+    (sud.rouge -> EST_OK),
+EST_OUEST_VERT =
+    (ouest.rouge -> EST_VERT
+    |est.rouge -> OUEST_VERT
+    |est.continue -> EST_OUEST_VERT
+    ).
+
+property OUEST_OK = 
+    (est.vert -> EST_VERT
+    |ouest.vert -> OUEST_VERT
+    |sud.vert -> SUD_VERT),
+EST_VERT =
+    (ouest.vert -> EST_OUEST_VERT
+    |est.rouge -> OUEST_OK
+    ),
+OUEST_VERT =
+    (ouest.rouge -> OUEST_OK
+    |est.vert -> EST_OUEST_VERT
+    |ouest.{tourneDroite, continue} -> OUEST_VERT
+    ),
+SUD_VERT =
+    (sud.rouge -> OUEST_OK),
+EST_OUEST_VERT =
+    (ouest.rouge -> EST_VERT
+    |est.rouge -> OUEST_VERT
+    |ouest.{tourneDroite, continue} -> EST_OUEST_VERT
+    ).
+
+property SUD_OK = 
+    (est.vert -> EST_VERT
+    |ouest.vert -> OUEST_VERT
+    |sud.vert -> SUD_VERT),
+EST_VERT =
+    (ouest.vert -> EST_OUEST_VERT
+    |est.rouge -> SUD_OK
+    ),
+OUEST_VERT =
+    (ouest.rouge -> SUD_OK
+    |est.vert -> EST_OUEST_VERT
+    ),
+SUD_VERT =
+    (sud.rouge -> SUD_OK
+    |sud.{tourneDroite, tourneGauche} -> SUD_VERT),
+EST_OUEST_VERT =
+    (ouest.rouge -> EST_VERT
+    |est.rouge -> OUEST_VERT
+    ).
+
+
+
+||TEST2 = (CONTROLE_INTERSECTION_SAUF_NORD || EST_OK || OUEST_OK || SUD_OK).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 8                                                     (5 points) */
