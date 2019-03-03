@@ -171,7 +171,9 @@ EO[i:1..2] =
     |when (i < 2) SET_EO.vert -> EO[i+1]
     ).
     
-||BLOQUER_LUMIERES_ADJACENTES = ( LUMIERES|| MUTEX_DIRECTION).
+||BLOQUER_LUMIERES_ADJACENTES(CardinaliteBloque=CardinaliteBloqueDefaut) = 
+    (LUMIERES(CardinaliteBloque)|| MUTEX_DIRECTION || BLOQUER_CARDINALITE(CardinaliteBloque))
+    \{cardinalite[CardinaliteBloque]}.
 
 // 1 << (Car - 1) = Tout les bits à 0 sauf celui en cours.
 
@@ -187,16 +189,23 @@ CONTROLEUR_INTERSECTION[cl: COD_Lum] =
     |when ( ((cl - (1<<(Car-1))) - (1<<((((Car-1) + (MaxCadinalite/2)) % MaxCadinalite)))) == 0) cardinalite[Car].{continue, tourneDroite} -> CONTROLEUR_INTERSECTION[cl]
     ).
 
-||CONTROLEUR_INTERSECTIONS =
+||CONTROLEUR_INTERSECTIONS(CardinaliteBloque=CardinaliteBloqueDefaut) =
     forall [i:N_Cardinalite]
-    (CONTROLEUR_INTERSECTION(i)).
-
-||CONTROLE_INTERSECTION(CardinaliteBloque=CardinaliteBloqueDefaut) = 
-    (CONTROLEUR_INTERSECTIONS || LUMIERES ||PIETONS || VOITURES || BLOQUER_LUMIERES_ADJACENTES || BLOQUER_CARDINALITE(CardinaliteBloque))
+    (CONTROLEUR_INTERSECTION(i) || BLOQUER_CARDINALITE(CardinaliteBloque))
     \{cardinalite[CardinaliteBloque]}.
 
-||Q5 = CONTROLE_INTERSECTION(1)
+||CONTROLE_INTERSECTION(CardinaliteBloque=CardinaliteBloqueDefaut) = 
+    (CONTROLEUR_INTERSECTIONS(CardinaliteBloque) 
+    || LUMIERES(CardinaliteBloque) || PIETONS 
+    || VOITURES(CardinaliteBloque) || BLOQUER_LUMIERES_ADJACENTES(CardinaliteBloque) 
+    || BLOQUER_CARDINALITE(CardinaliteBloque))
+    \{cardinalite[CardinaliteBloque]}.
+
+||CONTROLE_INTERSECTION_SAUF_NORD = 
+    CONTROLE_INTERSECTION(1)
     /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
+
+||Q5 = (CONTROLE_INTERSECTION_SAUF_NORD).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -208,6 +217,22 @@ CONTROLEUR_INTERSECTION[cl: COD_Lum] =
 /* effectuée quand il y a au moins une lumière verte allumée. Spécifiez un   */
 /* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+set DirectionsSaufNord = {est, ouest, sud}
+
+property PIETON_OK_SAUF_NORD = TRAVERSE,
+TRAVERSE = 
+    (traverse -> TRAVERSE
+    | DirectionsSaufNord.vert -> FEU_VERT[1]
+    ),
+
+FEU_VERT[nbVert:1..MaxCadinalite] =
+    (when (nbVert < MaxCadinalite) DirectionsSaufNord.vert -> FEU_VERT[nbVert+1]
+    |when (nbVert > 1) DirectionsSaufNord.rouge -> FEU_VERT[nbVert-1]
+    |when (nbVert == 1) DirectionsSaufNord.rouge -> PIETON_OK_SAUF_NORD
+    ).
+
+||TEST1 = (CONTROLE_INTERSECTION_SAUF_NORD || PIETON_OK_SAUF_NORD).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
