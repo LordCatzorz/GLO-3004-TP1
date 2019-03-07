@@ -366,31 +366,31 @@ EST_OUEST_VERT =
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
-progress PIETONS_PEUT_TRAVERSE = {ActionsPieton}
+// progress PIETONS_PEUT_TRAVERSE = {ActionsPieton}
 
-progress NORD_PEUT_TOURNE_DROITE = {nord.tourneDroite}
-progress NORD_PEUT_TOURNE_GAUCHE = {nord.tourneGauche}
-progress NORD_PEUT_CONTINUE = {nord.continue}
-progress NORD_PEUT_VERT = {nord.vert}
-progress NORD_PEUT_ROUGE = {nord.rouge}
+// progress NORD_PEUT_TOURNE_DROITE = {nord.tourneDroite}
+// progress NORD_PEUT_TOURNE_GAUCHE = {nord.tourneGauche}
+// progress NORD_PEUT_CONTINUE = {nord.continue}
+// progress NORD_PEUT_VERT = {nord.vert}
+// progress NORD_PEUT_ROUGE = {nord.rouge}
 
-progress EST_PEUT_TOURNE_DROITE = {est.tourneDroite}
-progress EST_PEUT_TOURNE_GAUCHE = {est.tourneGauche}
-progress EST_PEUT_CONTINUE = {est.continue}
-progress EST_PEUT_VERT = {est.vert}
-progress EST_PEUT_ROUGE = {est.rouge}
+// progress EST_PEUT_TOURNE_DROITE = {est.tourneDroite}
+// progress EST_PEUT_TOURNE_GAUCHE = {est.tourneGauche}
+// progress EST_PEUT_CONTINUE = {est.continue}
+// progress EST_PEUT_VERT = {est.vert}
+// progress EST_PEUT_ROUGE = {est.rouge}
 
-progress SUD_PEUT_TOURNE_DROITE = {sud.tourneDroite}
-progress SUD_PEUT_TOURNE_GAUCHE = {sud.tourneGauche}
-progress SUD_PEUT_CONTINUE = {sud.continue}
-progress SUD_PEUT_VERT = {sud.vert}
-progress SUD_PEUT_ROUGE = {sud.rouge}
+// progress SUD_PEUT_TOURNE_DROITE = {sud.tourneDroite}
+// progress SUD_PEUT_TOURNE_GAUCHE = {sud.tourneGauche}
+// progress SUD_PEUT_CONTINUE = {sud.continue}
+// progress SUD_PEUT_VERT = {sud.vert}
+// progress SUD_PEUT_ROUGE = {sud.rouge}
 
-progress OUEST_PEUT_TOURNE_DROITE = {ouest.tourneDroite}
-progress OUEST_PEUT_TOURNE_GAUCHE = {ouest.tourneGauche}
-progress OUEST_PEUT_CONTINUE = {ouest.continue}
-progress OUEST_PEUT_VERT = {ouest.vert}
-progress OUEST_PEUT_ROUGE = {ouest.rouge}
+// progress OUEST_PEUT_TOURNE_DROITE = {ouest.tourneDroite}
+// progress OUEST_PEUT_TOURNE_GAUCHE = {ouest.tourneGauche}
+// progress OUEST_PEUT_CONTINUE = {ouest.continue}
+// progress OUEST_PEUT_VERT = {ouest.vert}
+// progress OUEST_PEUT_ROUGE = {ouest.rouge}
 
 
 
@@ -489,6 +489,42 @@ OUEST_EST_VERT =
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+
+
+progress NORD_PEUT_VERT = {nord.vert}
+progress NORD_PEUT_ROUGE = {nord.rouge}
+progress EST_PEUT_VERT = {est.vert}
+progress EST_PEUT_ROUGE = {est.rouge}
+progress SUD_PEUT_VERT = {sud.vert}
+progress SUD_PEUT_ROUGE = {sud.rouge}
+progress OUEST_PEUT_VERT = {ouest.vert}
+progress OUEST_PEUT_ROUGE = {ouest.rouge}
+
+progress INT1_PIETONS_PEUT_TRAVERSE = {[1].ActionsPieton}
+progress INT1_OUEST_PEUT_TOURNE_DROITE = {[1].ouest.tourneDroite}
+progress INT1_OUEST_PEUT_CONTINUE = {[1].ouest.continue}
+progress INT1_SUD_PEUT_TOURNE_DROITE = {[1].sud.tourneDroite}
+progress INT1_SUD_PEUT_TOURNE_GAUCHE = {[1].sud.tourneGauche}
+progress INT1_EST_PEUT_CONTINUE = {[1].est.continue}
+progress INT1_EST_PEUT_TOURNE_GAUCHE = {[1].est.tourneGauche}
+
+progress INT2_PIETONS_PEUT_TRAVERSE = {[2].ActionsPieton}
+progress INT2_NORD_PEUT_TOURNE_DROITE = {[2].nord.tourneDroite}
+progress INT2_NORD_PEUT_TOURNE_GAUCHE = {[2].nord.tourneGauche}
+progress INT2_NORD_PEUT_CONTINUE = {[2].nord.continue}
+progress INT2_EST_PEUT_TOURNE_DROITE = {[2].est.tourneDroite}
+progress INT2_EST_PEUT_TOURNE_GAUCHE = {[2].est.tourneGauche}
+progress INT2_EST_PEUT_CONTINUE = {[2].est.continue}
+progress INT2_SUD_PEUT_TOURNE_DROITE = {[2].sud.tourneDroite}
+progress INT2_SUD_PEUT_TOURNE_GAUCHE = {[2].sud.tourneGauche}
+progress INT2_SUD_PEUT_CONTINUE = {[2].sud.continue}
+progress INT2_OUEST_PEUT_TOURNE_DROITE = {[2].ouest.tourneDroite}
+progress INT2_OUEST_PEUT_TOURNE_GAUCHE = {[2].ouest.tourneGauche}
+progress INT2_OUEST_PEUT_CONTINUE = {[2].ouest.continue}
+
+
+
+
 VOITURE_SYNC = ({approcheC, approcheG, approcheD} -> VSYNC ),
 VSYNC = 
     (continue -> finitC -> VOITURE_SYNC 
@@ -509,8 +545,32 @@ VSYNC =
     [1].ouest.approcheG/[2].nord.finitG
 }.
 
-|| PIETONS_SYNC = ([1..2]:PIETONS).
+||PIETONS_SYNC = ([1..2]:PIETONS).
 
-||TEST5 = (VOITURES_SYNC || PIETONS_SYNC || [1]:CONTROLE_INTERSECTION_SAUF_NORD || [2]:CONTROLE_INTERSECTION_X)
-/{forall[i:1..2][act:ActionsLumiere][car:DescCardinalite] {[car].[act]/[i].[car].[act]}}
-.
+||INTERSECTIONS_SYNC = ([1]:CONTROLE_INTERSECTION_SAUF_NORD || [2]:CONTROLE_INTERSECTION_X).
+
+||TEST5 = (VOITURES_SYNC || PIETONS_SYNC || INTERSECTIONS_SYNC)
+/{forall[i:1..2][act:ActionsLumiere][car:{est, ouest, sud}] {[car].[act]/[i].[car].[act], nord.[act]/[2].nord.[act]}}.
+
+
+// {
+//     [1].
+//     {
+//         est.{approcheC, approcheD, approcheG, attend, continue, finitD, finitG, tourneDroite, tourneGauche},
+//         nord.{continue, tourneDroite, tourneGauche, traverse}, 
+//         ouest.{approcheC, approcheD, approcheG, attend, continue, finitC, finitD, finitG, tourneDroite, tourneGauche}, 
+//         sud.{approcheC, approcheD, approcheG, attend, continue, finitC, finitD, tourneDroite, tourneGauche}, 
+//         traverse
+//     }, 
+//     [2].
+//     {
+//         cardinalite[0].{continue, rouge, tourneDroite, tourneGauche, traverse, vert},
+//         est.{approcheC, approcheD, approcheG, attend, continue, finitC, finitD, finitG, tourneDroite, tourneGauche},
+//         nord.{approcheC, approcheD, approcheG, attend, continue, finitC, finitD, tourneDroite, tourneGauche},
+//         ouest.{approcheC, approcheD, approcheG, attend, continue, finitD, finitG, tourneDroite, tourneGauche},
+//         sud.{approcheC, approcheD, approcheG, attend, continue, finitC, finitG, tourneDroite, tourneGauche},
+//         traverse
+//     },
+//     {est, nord, ouest, sud}.{rouge, vert}
+// }
+
