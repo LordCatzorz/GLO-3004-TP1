@@ -61,11 +61,11 @@ BLOQUER_CARDINALITE(CardinaliteBloque=CardinaliteBloqueDefaut) =
             cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche
             }.
 ||VOITURES(CardinaliteBloque=CardinaliteBloqueDefaut) = (Cardinalite:VOITURE || BLOQUER_CARDINALITE(CardinaliteBloque))
-    // Masquer les actions que nous avons bloqué
-    \{cardinalite[CardinaliteBloque],
-    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
-    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
-    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
+    // // Masquer les actions que nous avons bloqué
+    .// \{cardinalite[CardinaliteBloque],
+    // cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    // cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    // cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||Q2 = VOITURES(1)
     /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]
@@ -107,10 +107,10 @@ VERT = (rouge -> ROUGE).
 
 ||LUMIERES(CardinaliteBloque=CardinaliteBloqueDefaut) = 
     (Cardinalite:LUMIERE || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque],
-    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
-    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
-    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
+    .// \{cardinalite[CardinaliteBloque],
+    // cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    // cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    // cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||Q4 = LUMIERES(1)
     /{forall [i:N_Cardinalite] {[@(DescCardinalite, i-1)]/cardinalite[i]}}.
@@ -176,10 +176,10 @@ EO[i:1..2] =
     
 ||BLOQUER_LUMIERES_ADJACENTES(CardinaliteBloque=CardinaliteBloqueDefaut) = 
     (LUMIERES(CardinaliteBloque)|| MUTEX_DIRECTION || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque],
-    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
-    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
-    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
+    .// \{cardinalite[CardinaliteBloque],
+    // cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    // cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    // cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 // 1 << (Car - 1) = Tout les bits à 0 sauf celui en cours.
 
@@ -198,20 +198,20 @@ CONTROLEUR_INTERSECTION[cl: COD_Lum] =
 ||CONTROLEUR_INTERSECTIONS(CardinaliteBloque=CardinaliteBloqueDefaut) =
     forall [i:N_Cardinalite]
     (CONTROLEUR_INTERSECTION(i) || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque],
-    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
-    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
-    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
+    .// \{cardinalite[CardinaliteBloque],
+    // cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    // cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    // cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||CONTROLE_INTERSECTION(CardinaliteBloque=CardinaliteBloqueDefaut) = 
     (CONTROLEUR_INTERSECTIONS(CardinaliteBloque) 
     || LUMIERES(CardinaliteBloque) || PIETONS 
     || VOITURES(CardinaliteBloque) || BLOQUER_LUMIERES_ADJACENTES(CardinaliteBloque) 
     || BLOQUER_CARDINALITE(CardinaliteBloque))
-    \{cardinalite[CardinaliteBloque],
-    cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
-    cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
-    cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
+    .// \{cardinalite[CardinaliteBloque],
+    // cardinalite[(((CardinaliteBloque+1)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneDroite,
+    // cardinalite[(((CardinaliteBloque+2)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].continue,
+    // cardinalite[(((CardinaliteBloque+3)*(CardinaliteBloque!=0)-1)%MaxCadinalite)+1].tourneGauche}.
 
 ||CONTROLE_INTERSECTION_SAUF_NORD = 
     CONTROLE_INTERSECTION(1)
@@ -489,10 +489,28 @@ OUEST_EST_VERT =
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+VOITURE_SYNC = ({approcheC, approcheG, approcheD} -> VSYNC ),
+VSYNC = 
+    (continue -> finitC -> VOITURE_SYNC 
+    |tourneGauche -> finitG -> VOITURE_SYNC 
+    |tourneDroite -> finitD -> VOITURE_SYNC 
+    |attend -> VSYNC ).
 
 
+|| VOITURES_SYNC1 = [1].{est,ouest,sud}:VOITURE_SYNC.
+|| VOITURES_SYNC2 = [2].{est,ouest,sud,nord}:VOITURE_SYNC.
 
 
+||VOITURES_SYNC = (VOITURES_SYNC1 || VOITURES_SYNC2)
+/{  [2].est.approcheC/[1].est.finitC,
+    [2].est.approcheG/[1].sud.finitG,
+    [1].ouest.approcheC/[2].ouest.finitC,
+    [1].ouest.approcheD/[2].sud.finitD,
+    [1].ouest.approcheG/[2].nord.finitG
+}.
 
+|| PIETONS_SYNC = ([1..2]:PIETONS).
 
-
+||TEST5 = (VOITURES_SYNC || PIETONS_SYNC || [1]:CONTROLE_INTERSECTION_SAUF_NORD || [2]:CONTROLE_INTERSECTION_X)
+/{forall[i:1..2][act:ActionsLumiere][car:DescCardinalite] {[car].[act]/[i].[car].[act]}}
+.
