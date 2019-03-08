@@ -268,12 +268,14 @@ property CONTROLE_SUD = ( sud.vert -> SUD | est.vert -> EST | ouest.vert -> OUES
 /* commentaire votre choix. Il ne doit pas y avoir violation de propriétés   */
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 /*
 Nous avons fait des singletons pour assurer que toutes les actions possibles
 puissent toujours êtres faites. Par exemple, si on avait fait une seule propriété
 pour l'est, on aurait pu se trouver dans des situations ou on peut seulement
 continuer ou seulement tourner à gauche. Or, on veut pouvoir faire les deux.
 */
+
 // progress PIETON_PEUT_TRAVERSER = { traverse }
 // progress EST_PEUT_AVANCER = { est.continue }
 // progress EST_PEUT_TOURNER = { est.tourneGauche }
@@ -296,6 +298,20 @@ continuer ou seulement tourner à gauche. Or, on veut pouvoir faire les deux.
 /* vice-versa.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*
+    Les idées derrière cette modélisation sont similaires à celle pour
+    l'intersection en T. L'ensemble des directions comporte une direction de
+    plus, le nord, ce qui fait qu'il faut créer deux nouveaux processus
+    VOITURES_X et LUMIERES_X. Par ailleurs, le principe de fonctionnement
+    de CONTROLE_INTERSECTION_X est identique à celui de CONTROLE_INTERSECTION :
+    Les lumieres sont initialement toutes rouges, ce qui permet aux voitures
+    d'avancer. Lorsqu'une lumière s'allume, cette lumière peut s'éteindre, une
+    voiture peut faire les actions appropriées, ou la lumière opposée peut
+    s'allumer. Lorsque deux lumières opposées sont allumées, les actions possibles
+    sont restreintes. Les propriétés de sûreté quant aux piétons et aux lumières
+    suivent les mêmes principes que pour l'intersection en T, et il en va de même
+    des propriétés de progrès.
+*/
 
 set DirectionsX = { nord, sud, est, ouest }
 ||VOITURES_X = ( DirectionsX:VOITURE ).
@@ -460,23 +476,23 @@ property CONTROLE_NORD_X = (
 
 
 // question 8
-// progress pieton_peut_traverser = { traverse }
+// progress PIETON_PEUT_TRAVERSER = { traverse }
 
-// progress est_avance = { est.continue }
-// progress est_gauche = { est.tournegauche }
-// progress est_droite = { est.tournedroite }
+// progress EST_AVANCE = { est.continue }
+// progress EST_GAUCHE = { est.tournegauche }
+// progress EST_DROITE = { est.tournedroite }
 
-// progress ouest_avance = { ouest.continue }
-// progress ouest_gauche = { ouest.tournegauche }
-// progress ouest_droite = { ouest.tournedroite }
+// progress OUEST_AVANCE = { ouest.continue }
+// progress OUEST_GAUCHE = { ouest.tournegauche }
+// progress OUEST_DROITE = { ouest.tournedroite }
 
-// progress sud_avance = { sud.continue }
-// progress sud_gauche = { sud.tournegauche }
-// progress sud_droite = { sud.tournedroite }
+// progress SUD_AVANCE = { sud.continue }
+// progress SUD_GAUCHE = { sud.tournegauche }
+// progress SUD_DROITE = { sud.tournedroite }
 
-// progress nord_avance = { nord.continue }
-// progress nord_gauche = { nord.tournegauche }
-// progress nord_droite = { nord.tournedroite }
+// progress NORD_AVANCE = { nord.continue }
+// progress NORD_GAUCHE = { nord.tournegauche }
+// progress NORD_DROITE = { nord.tournedroite }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
