@@ -171,6 +171,15 @@ SUD = (
 /* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*
+    Propriété indiquant à quel moment les piétons peuvent effectuer l'action de           
+    traverser à une intersection. Il s'agit en fait d'un compteur. Lorsque toutes        
+    les lumières sont rouges, et seulement à ce moment, alors un piéton peut traverser.    
+    Si au moins une lumière est allumée (c'est-à-dire verte) alors on passe au processus    
+    PAS_TRAVERSE indiquant que le piéton doit attendre que toutes les lumières soient    
+    rouges. Dès qu'elles sont toutes rouges, on passe dans le processus TRAVERSE         
+*/
+
 property PIETONS_OK = TRAVERSE,
 TRAVERSE = (
     traverse -> TRAVERSE
@@ -516,6 +525,19 @@ property CONTROLE_NORD_X = (
 /* ne devrait y avoir ni blocage ni violation de propriétés ni de violation  */
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/*
+    Ici on synchronise les deux intersections avec les actions approcheC, si une voiture            
+    passe d'une intersection à une autre en faisant l'action de continuer, approcheG,           
+    si une voiture passe d'une intersection à l'autre en tournant à gauche et approcheD            
+    si une voiture passe d'une intersection à l'autre en tournant à droite. Les renommages        
+    effectués sont pour précisés le lien entre les voitures provenant d'une intersection et         
+    s'engageant dans une autre. INTERSECTIONS_SYNC nous permet de synchroniser les lumières         
+    des deux intersections (lorsque la luumière Nord est verte dans l'intersection en croix,     
+    celle de l'intersection en T l'est également (même chose pour toutes les autres directions.    
+    Finalement dans TEST5 on parallélise le dernier processus défini avec PIETONS, TEST1, TEST2,    
+    TEST3 et TEST4 afin de conserver ce qui a été défini précédemment
+*/
 
 VOITURE_SYNC = ({approcheC, approcheG, approcheD} -> VSYNC),
 VSYNC = (continue -> finitC -> VOITURE_SYNC |
