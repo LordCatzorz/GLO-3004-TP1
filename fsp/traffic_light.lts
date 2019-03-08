@@ -175,7 +175,7 @@ PAS_TRAVERSE[allumees:1..2] = (
 /* l’absence de collision.                                                   */
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-// À réviser pour permettre plusieurs actions de suite.
+
 property CONTROLE_EST = ( est.vert -> EST_VERT | ouest.vert -> OUEST_VERT | sud.vert -> SUD_VERT ),
     EST_VERT = (
         {est.continue, est.tourneGauche} -> EST_VERT
@@ -214,7 +214,7 @@ property CONTROLE_SUD = ( sud.vert -> SUD_VERT | est.vert -> EST_VERT | ouest.ve
     SUD_VERT = ( 
         {sud.tourneGauche, sud.tourneDroite} -> SUD_VERT
         | sud.rouge -> CONTROLE_SUD
-     ),
+    ),
     EST_VERT = (
         ouest.vert -> EST_OUEST_VERT
         | est.rouge -> CONTROLE_SUD
