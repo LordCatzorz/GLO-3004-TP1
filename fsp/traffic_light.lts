@@ -113,7 +113,20 @@ VERT = ( rouge -> ROUGE ).
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// Modélisation avec plusieurs processus locaux
+/*
+    Nous utilisons un processus local pour chacun des "états" possibles des
+    lumières. Elles peuvent êtres toutes rouges, ou une d'entre elles est verte
+    et les autres sont rouges, ou l'est et l'ouest sont vertes en même temps.
+    Les pirétons peuvent seulement traverser lorsque toutes les lumières sont
+    rouges. Sinon, lorsqu'elles sont toutes rouges, l'une d'entre elles peut
+    devenir verte. Lorsqu'une lumière est verte, les actions de la voiture
+    associée à cette lumière sont possibles, et la lumière peut aussi redevenir
+    rouge (on retourne alors à l'état de départ, où toutes les lumières sont
+    rouges). Dans les états est et ouest, il est aussi possible d'allumer la
+    lumière opposée pour aller dans EST_OUEST, et alors il est possible pour
+    l'une ou l'autre de devenir rouge, ou encore pour les voitures de continuer,
+    et la voiture ouest de tourner à droite.
+*/
 CONTROLE_INTERSECTION = ROUGES,
 ROUGES = ( 
     traverse -> ROUGES
