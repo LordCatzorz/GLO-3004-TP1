@@ -453,7 +453,6 @@ progress NORD_GAUCHE = { nord.tourneGauche }
 progress NORD_DROITE = { nord.tourneDroite }
 
 
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 10                                                   (10 points) */
 /*                                                                           */
@@ -476,6 +475,30 @@ progress NORD_DROITE = { nord.tourneDroite }
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+VOITURE_SYNC = ({approcheC, approcheG, approcheD} -> VSYNC),
+VSYNC = (continue -> finitC -> VOITURE_SYNC |
+    tourneGauche -> finitG -> VOITURE_SYNC |
+    tourneDroite -> finitD -> VOITURE_SYNC |
+    attend -> VSYNC ).
+
+||VOITURES_SYNC1 = [1].{DirectionsT}:VOITURE_SYNC.
+
+||VOITURES_SYNC2 = [2].{DirectionsX}:VOITURE_SYNC.
+
+||VOITURES_SYNC = (VOITURES_SYNC1 || VOITURES_SYNC2) /
+    {
+        [2].est.approcheC/[1].est.finitC,
+        [2].est.approcheG/[1].sud.finitG,
+        [1].ouest.approcheC/[2].ouest.finitC,
+        [1].ouest.approcheD/[2].sud.finitD,
+        [1].ouest.approcheG/[2].nord.finitG
+    }.
+
+
+||PIETONS_SYNC = ( [1..2]:PIETONS ).
+
+||INTERSECTIONS_SYNC = ( VOITURES_SYNC || [1]:INTERSECTION || [2]:INTERSECTION_X ) /
+    {forall[i:1..2][act:{rouge, vert}][car:{est, ouest, sud}] {[car].[act]/[i].[car].[act], nord.[act]/[2].nord.[act]}} 
 
 
 
