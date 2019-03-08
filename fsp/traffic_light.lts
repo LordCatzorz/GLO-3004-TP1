@@ -500,13 +500,7 @@ VSYNC = (continue -> finitC -> VOITURE_SYNC |
         {[dir].[act]/[i].[dir].[act], nord.[act]/[2].nord.[dir]}
     }.
 
-||TEST5 = ( INTERSECTIONS_SYNC || [1]:TEST1 || [2]:TEST3 ) /
-    {
-        forall[i:1..2][act:{rouge, vert}][dir:{ DirectionsT }]
-        {[dir].[act]/[i].[dir].[act], nord.[act]/[2].nord.[dir]}
-    }.
-
-||TEST6 = ( INTERSECTIONS_SYNC || [1]:TEST2 || [2]:TEST4 ) /
+||TEST5 = ( INTERSECTIONS_SYNC || [1..2]:PIETONS || [1]:TEST1 || [1]:TEST2 || [2]:TEST3 || [2]:TEST4 ) /
     {
         forall[i:1..2][act:{rouge, vert}][dir:{ DirectionsT }]
         {[dir].[act]/[i].[dir].[act], nord.[act]/[2].nord.[dir]}
