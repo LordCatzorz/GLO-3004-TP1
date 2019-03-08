@@ -113,7 +113,23 @@ VERT = ( rouge -> ROUGE ).
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// Modélisation avec plusieurs processus locaux
+/*
+    Nous utilisons un processus local pour chacun des "états" possibles des
+    lumières. Elles peuvent êtres toutes rouges, ou une d'entre elles est verte
+    et les autres sont rouges, ou l'est et l'ouest sont vertes en même temps.
+    Les pirétons peuvent seulement traverser lorsque toutes les lumières sont
+    rouges. Sinon, lorsqu'elles sont toutes rouges, l'une d'entre elles peut
+    devenir verte. Lorsqu'une lumière est verte, les actions de la voiture
+    associée à cette lumière sont possibles, et la lumière peut aussi redevenir
+    rouge (on retourne alors à l'état de départ, où toutes les lumières sont
+    rouges). Dans les états est et ouest, il est aussi possible d'allumer la
+    lumière opposée pour aller dans EST_OUEST, et alors il est possible pour
+    l'une ou l'autre de devenir rouge, ou encore pour les voitures de continuer,
+    et la voiture ouest de tourner à droite. Les actions illégales en tout temps
+    (tourner à droite pour la voiture est, tourner à gauche pour la voiture
+    ouest et continuer pour la voiture sud), sont empêchées en les ajoutant à
+    l'alphabet du processus.
+*/
 CONTROLE_INTERSECTION = ROUGES,
 ROUGES = ( 
     traverse -> ROUGES
@@ -154,6 +170,7 @@ SUD = (
 /* effectuée quand il y a au moins une lumière verte allumée. Spécifiez un   */
 /* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 property PIETONS_OK = TRAVERSE,
 TRAVERSE = (
     traverse -> TRAVERSE
@@ -175,6 +192,15 @@ PAS_TRAVERSE[allumees:1..2] = (
 /* l’absence de collision.                                                   */
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/*
+    Pour chaque lumière, le processus contrôle consiste à suivre l'état de toutes
+    les lumières, et à permettre les actions associées à une lumière seulement
+    lorsque celle-ci est allumée. Il est nécessaire de suivre l'état des autres
+    lumières afin d'éviter qu'une lumière s'allume lorsqu'elle ne peut pas (p.ex.,
+    sud s'allume alors que est est allumée) et pour restreindre les actions lorsque
+    la lumière opposée est allumée (dans le cas de est et ouest).
+*/
 
 property CONTROLE_EST = ( est.vert -> EST | ouest.vert -> OUEST | sud.vert -> SUD ),
     EST = (
@@ -242,12 +268,14 @@ property CONTROLE_SUD = ( sud.vert -> SUD | est.vert -> EST | ouest.vert -> OUES
 /* commentaire votre choix. Il ne doit pas y avoir violation de propriétés   */
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 /*
 Nous avons fait des singletons pour assurer que toutes les actions possibles
 puissent toujours êtres faites. Par exemple, si on avait fait une seule propriété
 pour l'est, on aurait pu se trouver dans des situations ou on peut seulement
 continuer ou seulement tourner à gauche. Or, on veut pouvoir faire les deux.
 */
+
 // progress PIETON_PEUT_TRAVERSER = { traverse }
 // progress EST_PEUT_AVANCER = { est.continue }
 // progress EST_PEUT_TOURNER = { est.tourneGauche }
@@ -270,6 +298,20 @@ continuer ou seulement tourner à gauche. Or, on veut pouvoir faire les deux.
 /* vice-versa.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*
+    Les idées derrière cette modélisation sont similaires à celle pour
+    l'intersection en T. L'ensemble des directions comporte une direction de
+    plus, le nord, ce qui fait qu'il faut créer deux nouveaux processus
+    VOITURES_X et LUMIERES_X. Par ailleurs, le principe de fonctionnement
+    de CONTROLE_INTERSECTION_X est identique à celui de CONTROLE_INTERSECTION :
+    Les lumieres sont initialement toutes rouges, ce qui permet aux voitures
+    d'avancer. Lorsqu'une lumière s'allume, cette lumière peut s'éteindre, une
+    voiture peut faire les actions appropriées, ou la lumière opposée peut
+    s'allumer. Lorsque deux lumières opposées sont allumées, les actions possibles
+    sont restreintes. Les propriétés de sûreté quant aux piétons et aux lumières
+    suivent les mêmes principes que pour l'intersection en T, et il en va de même
+    des propriétés de progrès.
+*/
 
 set DirectionsX = { nord, sud, est, ouest }
 ||VOITURES_X = ( DirectionsX:VOITURE ).
@@ -434,23 +476,23 @@ property CONTROLE_NORD_X = (
 
 
 // question 8
-// progress pieton_peut_traverser = { traverse }
+// progress PIETON_PEUT_TRAVERSER = { traverse }
 
-// progress est_avance = { est.continue }
-// progress est_gauche = { est.tournegauche }
-// progress est_droite = { est.tournedroite }
+// progress EST_AVANCE = { est.continue }
+// progress EST_GAUCHE = { est.tournegauche }
+// progress EST_DROITE = { est.tournedroite }
 
-// progress ouest_avance = { ouest.continue }
-// progress ouest_gauche = { ouest.tournegauche }
-// progress ouest_droite = { ouest.tournedroite }
+// progress OUEST_AVANCE = { ouest.continue }
+// progress OUEST_GAUCHE = { ouest.tournegauche }
+// progress OUEST_DROITE = { ouest.tournedroite }
 
-// progress sud_avance = { sud.continue }
-// progress sud_gauche = { sud.tournegauche }
-// progress sud_droite = { sud.tournedroite }
+// progress SUD_AVANCE = { sud.continue }
+// progress SUD_GAUCHE = { sud.tournegauche }
+// progress SUD_DROITE = { sud.tournedroite }
 
-// progress nord_avance = { nord.continue }
-// progress nord_gauche = { nord.tournegauche }
-// progress nord_droite = { nord.tournedroite }
+// progress NORD_AVANCE = { nord.continue }
+// progress NORD_GAUCHE = { nord.tournegauche }
+// progress NORD_DROITE = { nord.tournedroite }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -485,7 +527,9 @@ VSYNC = (continue -> finitC -> VOITURE_SYNC |
 
 ||VOITURES_SYNC2 = [2].{DirectionsX}:VOITURE_SYNC.
 
-||VOITURES_SYNC = (VOITURES_SYNC1 || VOITURES_SYNC2) /
+EMPECHE_APPROCHE_INVALIDE = STOP + {[2].est.approcheD}.
+
+||VOITURES_SYNC = (VOITURES_SYNC1 || VOITURES_SYNC2 || EMPECHE_APPROCHE_INVALIDE) /
     {
         [2].est.approcheC/[1].est.finitC,
         [2].est.approcheG/[1].sud.finitG,
