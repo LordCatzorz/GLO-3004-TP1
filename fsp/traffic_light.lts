@@ -511,7 +511,9 @@ VSYNC = (continue -> finitC -> VOITURE_SYNC |
 
 ||VOITURES_SYNC2 = [2].{DirectionsX}:VOITURE_SYNC.
 
-||VOITURES_SYNC = (VOITURES_SYNC1 || VOITURES_SYNC2) /
+STOP_PROBLEME_ALPHABET = STOP + {[2].est.approcheD}.
+
+||VOITURES_SYNC = (VOITURES_SYNC1 || VOITURES_SYNC2 || STOP_PROBLEME_ALPHABET) /
     {
         [2].est.approcheC/[1].est.finitC,
         [2].est.approcheG/[1].sud.finitG,
