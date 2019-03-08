@@ -433,24 +433,24 @@ property CONTROLE_NORD_X = (
 ||TEST4 = ( INTERSECTION_X || CONTROLE_EST_X || CONTROLE_OUEST_X || CONTROLE_SUD_X || CONTROLE_NORD_X ).
 
 
-// Question 8
-progress PIETON_PEUT_TRAVERSER = { traverse }
+// question 8
+// progress pieton_peut_traverser = { traverse }
 
-progress EST_AVANCE = { est.continue }
-progress EST_GAUCHE = { est.tourneGauche }
-progress EST_DROITE = { est.tourneDroite }
+// progress est_avance = { est.continue }
+// progress est_gauche = { est.tournegauche }
+// progress est_droite = { est.tournedroite }
 
-progress OUEST_AVANCE = { ouest.continue }
-progress OUEST_GAUCHE = { ouest.tourneGauche }
-progress OUEST_DROITE = { ouest.tourneDroite }
+// progress ouest_avance = { ouest.continue }
+// progress ouest_gauche = { ouest.tournegauche }
+// progress ouest_droite = { ouest.tournedroite }
 
-progress SUD_AVANCE = { sud.continue }
-progress SUD_GAUCHE = { sud.tourneGauche }
-progress SUD_DROITE = { sud.tourneDroite }
+// progress sud_avance = { sud.continue }
+// progress sud_gauche = { sud.tournegauche }
+// progress sud_droite = { sud.tournedroite }
 
-progress NORD_AVANCE = { nord.continue }
-progress NORD_GAUCHE = { nord.tourneGauche }
-progress NORD_DROITE = { nord.tourneDroite }
+// progress nord_avance = { nord.continue }
+// progress nord_gauche = { nord.tournegauche }
+// progress nord_droite = { nord.tournedroite }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -494,15 +494,41 @@ VSYNC = (continue -> finitC -> VOITURE_SYNC |
         [1].ouest.approcheG/[2].nord.finitG
     }.
 
-
-||PIETONS_SYNC = ( [1..2]:PIETONS ).
-
 ||INTERSECTIONS_SYNC = ( VOITURES_SYNC || [1]:INTERSECTION || [2]:INTERSECTION_X ) /
-    {forall[i:1..2][act:{rouge, vert}][car:{est, ouest, sud}] {[car].[act]/[i].[car].[act], nord.[act]/[2].nord.[act]}} 
+    {
+        forall[i:1..2][act:{rouge, vert}][dir:{ DirectionsT }]
+        {[dir].[act]/[i].[dir].[act], nord.[act]/[2].nord.[dir]}
+    }.
+
+||TEST5 = ( INTERSECTIONS_SYNC || [1]:TEST1 || [2]:TEST3 ).
+||TEST6 = ( INTERSECTIONS_SYNC || [1]:TEST2 || [2]:TEST4 ).
 
 
+progress PIETON_PEUT_TRAVERSER = { [1].traverse }
 
+progress EST_AVANCE = { [1].est.continue }
+progress EST_GAUCHE = { [1].est.tourneGauche }
 
+progress OUEST_AVANCE = { [1].ouest.continue }
+progress OUEST_DROITE = { [1].ouest.tourneDroite }
 
+progress SUD_GAUCHE = { [1].sud.tourneGauche }
+progress SUD_DROITE = { [1].sud.tourneDroite }
 
+progress X_PIETON_PEUT_TRAVERSER = { [2].traverse }
 
+progress X_EST_AVANCE = { [2].est.continue }
+progress X_EST_GAUCHE = { [2].est.tourneGauche }
+progress X_EST_DROITE = { [2].est.tourneDroite }
+
+progress X_OUEST_AVANCE = { [2].ouest.continue }
+progress X_OUEST_GAUCHE = { [2].ouest.tourneGauche }
+progress X_OUEST_DROITE = { [2].ouest.tourneDroite }
+
+progress X_SUD_AVANCE = { [2].sud.continue }
+progress X_SUD_GAUCHE = { [2].sud.tourneGauche }
+progress X_SUD_DROITE = { [2].sud.tourneDroite }
+
+progress X_NORD_AVANCE = { [2].nord.continue }
+progress X_NORD_GAUCHE = { [2].nord.tourneGauche }
+progress X_NORD_DROITE = { [2].nord.tourneDroite }
