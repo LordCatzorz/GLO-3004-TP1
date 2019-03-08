@@ -35,7 +35,7 @@ VOITURE = ( ActionsVoiture -> VOITURE ).
 /* pouvez préfixer le processus _VOITURE_ par _est_, _ouest_ et _sud_.       */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 set DirectionsT = {est, ouest, sud}
-||VOITURES = ( Directions:VOITURE ).
+||VOITURES = ( DirectionsT:VOITURE ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -176,46 +176,59 @@ PAS_TRAVERSE[allumees:1..2] = (
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 // À réviser pour permettre plusieurs actions de suite.
-property CONTROLE_EST = ( est.vert -> EST_VERT | ouest.vert -> OUEST_VERT ),
-    EST_VERT = ( {est.continue, est.tourneGauche} -> EST_VERT
-    | ouest.vert -> EST_OUEST_VERT
-    | est.rouge -> CONTROLE_EST ),
-    EST_OUEST_VERT = ( est.continue -> EST_OUEST_VERT 
-    | ouest.rouge -> EST_VERT 
-    | est.rouge -> OUEST_VERT ),
-    OUEST_VERT = ( est.vert -> EST_OUEST_VERT 
-    | ouest.rouge -> CONTROLE_EST ).
+property CONTROLE_EST = ( est.vert -> EST_VERT | ouest.vert -> OUEST_VERT | sud.vert -> SUD_VERT ),
+    EST_VERT = (
+        {est.continue, est.tourneGauche} -> EST_VERT
+        | ouest.vert -> EST_OUEST_VERT
+        | est.rouge -> CONTROLE_EST
+    ),
+    EST_OUEST_VERT = (
+        est.continue -> EST_OUEST_VERT 
+        | ouest.rouge -> EST_VERT 
+        | est.rouge -> OUEST_VERT
+    ),
+    OUEST_VERT = (
+        est.vert -> EST_OUEST_VERT 
+        | ouest.rouge -> CONTROLE_EST
+    ),
+    SUD_VERT = ( sud.rouge -> CONTROLE_EST ).
 
-property CONTROLE_OUEST = ( ouest.vert -> OUEST_VERT | est.vert -> EST_VERT ),
-    OUEST_VERT = ( {ouest.continue, ouest.tourneDroite} -> OUEST_VERT
-    | est.vert -> EST_OUEST_VERT 
-    | ouest.rouge -> CONTROLE_OUEST ),
-    EST_OUEST_VERT = ( {ouest.continue, ouest.tourneDroite} -> EST_OUEST_VERT 
-    | ouest.rouge -> EST_VERT 
-    | est.rouge -> OUEST_VERT ),
+property CONTROLE_OUEST = ( ouest.vert -> OUEST_VERT | est.vert -> EST_VERT | sud.vert -> SUD_VERT ),
+    OUEST_VERT = ( 
+        {ouest.continue, ouest.tourneDroite} -> OUEST_VERT
+        | est.vert -> EST_OUEST_VERT 
+        | ouest.rouge -> CONTROLE_OUEST
+    ),
+    EST_OUEST_VERT = (
+        {ouest.continue, ouest.tourneDroite} -> EST_OUEST_VERT 
+        | ouest.rouge -> EST_VERT 
+        | est.rouge -> OUEST_VERT
+    ),
     EST_VERT = ( 
-     ouest.vert -> EST_OUEST_VERT
-    | est.rouge -> CONTROLE_OUEST ).
+        ouest.vert -> EST_OUEST_VERT
+        | est.rouge -> CONTROLE_OUEST
+    ),
+    SUD_VERT = ( sud.rouge -> CONTROLE_OUEST ).
 
 property CONTROLE_SUD = ( sud.vert -> SUD_VERT | est.vert -> EST_VERT | ouest.vert -> OUEST_VERT ),
     SUD_VERT = ( 
         {sud.tourneGauche, sud.tourneDroite} -> SUD_VERT
         | sud.rouge -> CONTROLE_SUD
-     ).
+     ),
+    EST_VERT = (
+        ouest.vert -> EST_OUEST_VERT
+        | est.rouge -> CONTROLE_SUD
+    ),
+    OUEST_VERT = (
+        ouest.rouge -> CONTROLE_SUD
+        | est.vert -> EST_OUEST_VERT
+    ),
+    EST_OUEST_VERT =
+        ( ouest.rouge -> EST_VERT
+        | est.rouge -> OUEST_VERT
+    ).
 
-<<<<<<< HEAD
-// property CONTROLE_LUMIERES = ( est.vert -> EST_VERT | ouest.vert -> OUEST_VERT | sud.vert -> SUD_VERT ),
-// 	EST_VERT = ( est.rouge -> CONTROLE_LUMIERES | ouest.vert -> EST_OUEST_VERT ),
-// 	OUEST_VERT = ( ouest.rouge -> CONTROLE_LUMIERES | est.vert -> EST_OUEST_VERT ),
-// 	EST_OUEST_VERT = ( est.rouge -> OUEST_VERT | ouest.rouge -> EST_VERT ),
-// 	SUD_VERT = ( sud.rouge -> CONTROLE_LUMIERES ).
-
-||TEST2 = ( INTERSECTION || CONTROLE_EST || CONTROLE_OUEST || CONTROLE_SUD || CONTROLE_LUMIERES ).
-=======
-property RESTE_ROUTE = STOP + {est.tourneDroite, sud.continue, ouest.tourneGauche}.
-
-||TEST2 = ( INTERSECTION || CONTROLE_EST || OUEST_OK || SUD_OK || RESTE_ROUTE ).
->>>>>>> cddc565413a1424ba3375acee382e70d8576635c
+||TEST2 = ( INTERSECTION || CONTROLE_EST || CONTROLE_OUEST || CONTROLE_SUD ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
