@@ -125,7 +125,10 @@ VERT = ( rouge -> ROUGE ).
     rouges). Dans les états est et ouest, il est aussi possible d'allumer la
     lumière opposée pour aller dans EST_OUEST, et alors il est possible pour
     l'une ou l'autre de devenir rouge, ou encore pour les voitures de continuer,
-    et la voiture ouest de tourner à droite.
+    et la voiture ouest de tourner à droite. Les actions illégales en tout temps
+    (tourner à droite pour la voiture est, tourner à gauche pour la voiture
+    ouest et continuer pour la voiture sud), sont empêchées en les ajoutant à
+    l'alphabet du processus.
 */
 CONTROLE_INTERSECTION = ROUGES,
 ROUGES = ( 
@@ -167,6 +170,7 @@ SUD = (
 /* effectuée quand il y a au moins une lumière verte allumée. Spécifiez un   */
 /* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 property PIETONS_OK = TRAVERSE,
 TRAVERSE = (
     traverse -> TRAVERSE
@@ -188,6 +192,15 @@ PAS_TRAVERSE[allumees:1..2] = (
 /* l’absence de collision.                                                   */
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/*
+    Pour chaque lumière, le processus contrôle consiste à suivre l'état de toutes
+    les lumières, et à permettre les actions associées à une lumière seulement
+    lorsque celle-ci est allumée. Il est nécessaire de suivre l'état des autres
+    lumières afin d'éviter qu'une lumière s'allume lorsqu'elle ne peut pas (p.ex.,
+    sud s'allume alors que est est allumée) et pour restreindre les actions lorsque
+    la lumière opposée est allumée (dans le cas de est et ouest).
+*/
 
 property CONTROLE_EST = ( est.vert -> EST | ouest.vert -> OUEST | sud.vert -> SUD ),
     EST = (
