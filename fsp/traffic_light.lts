@@ -434,13 +434,24 @@ property CONTROLE_NORD_X = (
 
 
 // Question 8
-// progress PIETON_PEUT_TRAVERSER = { traverse }
-// progress EST_PEUT_AVANCER = { est.continue }
-// progress EST_PEUT_TOURNER = { est.tourneGauche }
-// progress OUEST_PEUT_AVANCER = { ouest.continue }
-// progress OUEST_PEUT_TOURNER = { ouest.tourneDroite }
-// progress SUD_GAUCHE = { sud.tourneGauche }
-// progress SUD_DROITE = { sud.tourneDroite }
+progress PIETON_PEUT_TRAVERSER = { traverse }
+
+progress EST_AVANCE = { est.continue }
+progress EST_GAUCHE = { est.tourneGauche }
+progress EST_DROITE = { est.tourneDroite }
+
+progress OUEST_AVANCE = { ouest.continue }
+progress OUEST_GAUCHE = { ouest.tourneGauche }
+progress OUEST_DROITE = { ouest.tourneDroite }
+
+progress SUD_AVANCE = { sud.continue }
+progress SUD_GAUCHE = { sud.tourneGauche }
+progress SUD_DROITE = { sud.tourneDroite }
+
+progress NORD_AVANCE = { nord.continue }
+progress NORD_GAUCHE = { nord.tourneGauche }
+progress NORD_DROITE = { nord.tourneDroite }
+
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
