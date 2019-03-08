@@ -203,6 +203,7 @@ property CONTROLE_SUD = ( sud.vert -> SUD_VERT | est.vert -> EST_VERT | ouest.ve
         | sud.rouge -> CONTROLE_SUD
      ).
 
+<<<<<<< HEAD
 // property CONTROLE_LUMIERES = ( est.vert -> EST_VERT | ouest.vert -> OUEST_VERT | sud.vert -> SUD_VERT ),
 // 	EST_VERT = ( est.rouge -> CONTROLE_LUMIERES | ouest.vert -> EST_OUEST_VERT ),
 // 	OUEST_VERT = ( ouest.rouge -> CONTROLE_LUMIERES | est.vert -> EST_OUEST_VERT ),
@@ -210,6 +211,11 @@ property CONTROLE_SUD = ( sud.vert -> SUD_VERT | est.vert -> EST_VERT | ouest.ve
 // 	SUD_VERT = ( sud.rouge -> CONTROLE_LUMIERES ).
 
 ||TEST2 = ( INTERSECTION || CONTROLE_EST || CONTROLE_OUEST || CONTROLE_SUD || CONTROLE_LUMIERES ).
+=======
+property RESTE_ROUTE = STOP + {est.tourneDroite, sud.continue, ouest.tourneGauche}.
+
+||TEST2 = ( INTERSECTION || CONTROLE_EST || OUEST_OK || SUD_OK || RESTE_ROUTE ).
+>>>>>>> cddc565413a1424ba3375acee382e70d8576635c
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
