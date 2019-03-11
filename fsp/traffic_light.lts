@@ -10,6 +10,7 @@
 /*                                 Hiver 2019                                */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 1                                                     (5 points) */
 /*                                                                           */
@@ -23,7 +24,8 @@
 /* boucle sur lui même pour représenter le fait qu’une autre voiture         */
 /* pourrait arriver.                                                         */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+set ActionsVoiture = { continue, tourneGauche, tourneDroite }
+VOITURE = ( ActionsVoiture -> VOITURE ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 2                                                     (3 points) */
@@ -33,6 +35,8 @@
 /* respectivement aux voitures venant de l’est, de l’ouest et du sud. Vous   */
 /* pouvez préfixer le processus _VOITURE_ par _est_, _ouest_ et _sud_.       */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+set DirectionsT = { est, ouest, sud }
+||VOITURES = ( DirectionsT:VOITURE ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -42,9 +46,10 @@
 /* piétons. Un piéton peut effectuer une seule action _traverse_ puis boucle */
 /* sur lui-même                                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+PIETONS = ( traverse -> PIETONS ).
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*                                                                           */
 /* Question 4                                                     (5 points) */
 /*                                                                           */
 /* Par souci de simplicité, nous supposons que les lumières peuvent être     */
@@ -60,11 +65,15 @@
 /* l’est, à l’ouest et au sud. Vous pouvez préfixer le processus _LUMIERE_   */
 /* par _est_, _ouest_ et _sud_.                                              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+LUMIERE = ROUGE,
+ROUGE = ( vert -> VERT ),
+VERT = ( rouge -> ROUGE ).
+
+||LUMIERES = ( DirectionsT:LUMIERE ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 5                                                    (30 points) */
-/*                                                                           */
 /* Spécifiez des processus contrôlant le passage des voitures, des piétons   */
 /* et le changement des lumières. Les règles suivantes permettent de         */
 /* concevoir ce processus. Vous pouvez l’appeler _CONTROLE_INTERSECTION_     */
@@ -105,6 +114,54 @@
 /* voulez.                                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*
+    Nous utilisons un processus local pour chacun des "états" possibles des
+    lumières. Elles peuvent être toutes rouges, ou une d'elles est verte
+    et les autres sont rouges, ou l'est et l'ouest sont vertes en même temps.
+    Les piétons peuvent seulement traverser lorsque toutes les lumières sont
+    rouges. Aussi, lorsqu'elles sont toutes rouges, l'une d'entre elles peut
+    devenir verte. Lorsqu'une lumière est verte, les actions de la voiture
+    associée à cette lumière sont possibles, et la lumière peut aussi redevenir
+    rouge (on retourne alors à l'état de départ, où toutes les lumières sont
+    rouges). Dans les états est et ouest, il est aussi possible d'allumer la
+    lumière opposée pour aller dans EST_OUEST, et alors il est possible pour
+    l'une ou l'autre de devenir rouge, ou encore pour les voitures de continuer,
+    et la voiture ouest de tourner à droite. Les actions illégales en tout temps
+    (tourner à droite pour la voiture est, tourner à gauche pour la voiture
+    ouest et continuer pour la voiture sud), sont empêchées en les ajoutant à
+    l'alphabet du processus.
+*/
+
+CONTROLE_INTERSECTION = ROUGES,
+ROUGES = ( 
+    traverse -> ROUGES
+    | est.vert -> EST
+    | ouest.vert -> OUEST
+    | sud.vert -> SUD
+),
+EST = (
+    {est.continue, est.tourneGauche} -> EST
+    | est.rouge -> ROUGES 
+    | ouest.vert -> EST_OUEST
+),
+OUEST = (
+    {ouest.continue, ouest.tourneDroite} -> OUEST
+    | ouest.rouge -> ROUGES 
+    | est.vert -> EST_OUEST
+),
+EST_OUEST = (
+    {est.continue} -> EST_OUEST
+    | {ouest.continue, ouest.tourneDroite} -> EST_OUEST
+    | est.rouge -> OUEST 
+    | ouest.rouge -> EST
+),
+SUD = (
+    {sud.tourneGauche, sud.tourneDroite} -> SUD
+    | sud.rouge -> ROUGES
+) + {est.tourneDroite, ouest.tourneGauche, sud.continue}.
+
+||INTERSECTION = ( LUMIERES || PIETONS || VOITURES || CONTROLE_INTERSECTION ).
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 6                                                    (10 points) */
@@ -116,6 +173,34 @@
 /* processus _TEST1_ pour faire la vérification au moyen de _Check_ de LTSA. */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*
+    Propriété indiquant à quel moment les piétons peuvent effectuer l'action de           
+    traverser à une intersection. Il s'agit en fait d'un compteur. Lorsque
+    toutes les lumières sont rouges (on est dans le processus local TRAVERSE),
+    et seulement à ce moment, alors un piéton peut traverser. Lorsqu'une lumière
+    devient verte,on passe au processus local PAS_TRAVERSE, avec vertes = 1.
+    S'il y a moins de 2 lumières vertes, une autre lumière peut passer au vert,
+    ce qui augmente le compte de lumières vertes à 2. S'il y a 2 lumières vertes,
+    on peut seulement faire passer l'une des lumières au rouge, ce qui diminue le
+    compte de lumières vertes de 1. Finalement, S'il y a seulement 1 lumière verte,
+    on peut la faire passer au rouge et retourner dans TRAVERSE. Le nombre de
+    lumières verte maximal est de 2, étant donné les particularités de la
+    configuration en T.
+*/
+
+property PIETONS_OK = TRAVERSE,
+TRAVERSE = (
+    traverse -> TRAVERSE
+    | { DirectionsT }.vert -> PAS_TRAVERSE[1]
+),
+PAS_TRAVERSE[vertes:1..2] = (
+    when (vertes < 2) { DirectionsT }.vert -> PAS_TRAVERSE[vertes+1] 
+    | when (vertes == 2) { DirectionsT }.rouge -> PAS_TRAVERSE[vertes-1]
+    | when (vertes == 1) { DirectionsT }.rouge -> TRAVERSE
+). 
+
+||TEST1 = ( INTERSECTION || PIETONS_OK ).
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 7                                                    (15 points) */
@@ -124,6 +209,72 @@
 /* l’absence de collision.                                                   */
 /* Utilisez un processus _TEST2_ pour faire cette vérification.              */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/*
+    Pour chaque lumière, le processus CONTROLE consiste à suivre l'état de toutes
+    les lumières, et à permettre les actions associées à une lumière seulement
+    lorsque celle-ci est allumée. Il est nécessaire de suivre l'état des autres
+    lumières afin d'éviter qu'une lumière s'allume lorsqu'elle ne peut pas (p.ex.,
+    SUD s'allume alors que EST est allumée) et pour restreindre les actions lorsque
+    la lumière opposée est allumée (dans le cas de EST et OUEST). En contrôlant
+    quelles lumières peuvent êtres allumées en même temps et en permettant aux
+    voitures de faire leurs actions seulement lorsque les lumières appropriées
+    sont allumées, cela permet d'éviter les collisions entre voitures.
+*/
+
+property CONTROLE_EST = ( est.vert -> EST | ouest.vert -> OUEST | sud.vert -> SUD),
+    EST = (
+        {est.continue, est.tourneGauche} -> EST
+        | ouest.vert -> EST_OUEST
+        | est.rouge -> CONTROLE_EST
+    ),
+    EST_OUEST = (
+        est.continue -> EST_OUEST 
+        | ouest.rouge -> EST 
+        | est.rouge -> OUEST
+    ),
+    OUEST = (
+        est.vert -> EST_OUEST 
+        | ouest.rouge -> CONTROLE_EST
+    ),
+    SUD = ( sud.rouge -> CONTROLE_EST ).
+
+property CONTROLE_OUEST = ( ouest.vert -> OUEST | est.vert -> EST | sud.vert -> SUD ),
+    OUEST = ( 
+        {ouest.continue, ouest.tourneDroite} -> OUEST
+        | est.vert -> EST_OUEST 
+        | ouest.rouge -> CONTROLE_OUEST
+    ),
+    EST_OUEST = (
+        {ouest.continue, ouest.tourneDroite} -> EST_OUEST 
+        | ouest.rouge -> EST 
+        | est.rouge -> OUEST
+    ),
+    EST = ( 
+        ouest.vert -> EST_OUEST
+        | est.rouge -> CONTROLE_OUEST
+    ),
+    SUD = ( sud.rouge -> CONTROLE_OUEST ).
+
+property CONTROLE_SUD = ( sud.vert -> SUD | est.vert -> EST | ouest.vert -> OUEST ),
+    SUD = ( 
+        {sud.tourneGauche, sud.tourneDroite} -> SUD
+        | sud.rouge -> CONTROLE_SUD
+    ),
+    EST = (
+        ouest.vert -> EST_OUEST
+        | est.rouge -> CONTROLE_SUD
+    ),
+    OUEST = (
+        ouest.rouge -> CONTROLE_SUD
+        | est.vert -> EST_OUEST
+    ),
+    EST_OUEST = (
+        ouest.rouge -> EST
+        | est.rouge -> OUEST
+    ).
+
+||TEST2 = ( TEST1 || CONTROLE_EST || CONTROLE_OUEST || CONTROLE_SUD ).
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -138,6 +289,22 @@
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*
+    Nous avons fait des singletons pour assurer que toutes les actions possibles
+    puissent toujours êtres faites. En effet, toutes les actions sont importantes,
+    donc il faut les mettre dans des propriétés de progrès distinctes. Sinon, on
+    pourrait se retrouver par exemple dans une situation où les voitures à l'est
+    peuvent seulement continuer, mais pas tourner à gauche.
+*/
+
+// progress PIETON_PEUT_TRAVERSER = { traverse }
+// progress EST_PEUT_AVANCER = { est.continue }
+// progress EST_PEUT_TOURNER = { est.tourneGauche }
+// progress OUEST_PEUT_AVANCER = { ouest.continue }
+// progress OUEST_PEUT_TOURNER = { ouest.tourneDroite }
+// progress SUD_GAUCHE = { sud.tourneGauche }
+// progress SUD_DROITE = { sud.tourneDroite }
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Question 9                                                    (15 points) */
@@ -151,6 +318,204 @@
 /* devez commenter les propriétés de progrès de l’intersection en T, et      */
 /* vice-versa.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/*
+    Les idées derrières cette modélisation sont similaires à celles pour
+    l'intersection en T. L'ensemble des directions comporte une direction de
+    plus, le nord, ce qui fait qu'il faut créer deux nouveaux processus
+    VOITURES_X et LUMIERES_X qui utilisent ces directions. Par ailleurs, le
+    principe de fonctionnement de CONTROLE_INTERSECTION_X est identique à celui
+    de CONTROLE_INTERSECTION : Les lumières sont initialement toutes rouges, ce
+    qui permet aux voitures d'avancer. Lorsqu'une lumière s'allume, cette lumière
+    peut s'éteindre, une voiture peut faire les actions appropriées, ou la
+    lumière opposée peut s'allumer. Lorsque deux lumières opposées sont allumées,
+    les actions possibles des voitures sont restreintes de façon à éviter les
+    collisions. Les propriétés de sûreté quant aux piétons et aux lumières
+    suivent les mêmes principes que pour l'intersection en T, et il en va
+    de même des propriétés de progrès.
+*/
+
+// Questions 1-4
+set DirectionsX = { nord, sud, est, ouest }
+||VOITURES_X = ( DirectionsX:VOITURE ).
+||LUMIERES_X = ( DirectionsX:LUMIERE ).
+
+// Question 5
+CONTROLE_INTERSECTION_X = ROUGES,
+ROUGES = ( 
+    traverse -> ROUGES
+    | est.vert -> EST
+    | ouest.vert -> OUEST
+    | sud.vert -> SUD
+    | nord.vert -> NORD
+),
+EST = (
+    est.{ ActionsVoiture } -> EST
+    | est.rouge -> ROUGES 
+    | ouest.vert -> EST_OUEST
+),
+OUEST = (
+    ouest.{ ActionsVoiture } -> OUEST
+    | ouest.rouge -> ROUGES 
+    | est.vert -> EST_OUEST
+),
+EST_OUEST = (
+    {est, ouest}.{continue, tourneDroite} -> EST_OUEST
+    | est.rouge -> OUEST 
+    | ouest.rouge -> EST
+),
+SUD = (
+    sud.{ ActionsVoiture } -> SUD
+    | sud.rouge -> ROUGES
+    | nord.vert -> NORD_SUD
+),
+NORD = (
+    nord.{ ActionsVoiture } -> NORD
+    | nord.rouge -> ROUGES
+    | sud.vert -> NORD_SUD
+),
+NORD_SUD = (
+    {nord, sud}.{continue, tourneDroite} -> NORD_SUD
+    | sud.rouge -> NORD
+    | nord.rouge -> SUD
+).
+
+||INTERSECTION_X = ( LUMIERES_X || PIETONS || VOITURES_X || CONTROLE_INTERSECTION_X ).
+
+
+// Question 6
+property PIETONS_OK_X = TRAVERSE,
+TRAVERSE = (
+    traverse -> TRAVERSE
+    | { DirectionsX }.vert -> PAS_TRAVERSE[1]
+),
+PAS_TRAVERSE[allumees:1..2] = (
+    when (allumees < 2) { DirectionsX }.vert -> PAS_TRAVERSE[allumees+1] 
+    | when (allumees == 2) { DirectionsX }.rouge -> PAS_TRAVERSE[allumees-1]
+    | when (allumees == 1) { DirectionsX }.rouge -> TRAVERSE
+). 
+
+||TEST3 = ( INTERSECTION_X || PIETONS_OK_X ).
+
+
+// Question 7
+property CONTROLE_EST_X = (
+        est.vert -> EST
+        | ouest.vert -> OUEST
+        | sud.vert -> SUD
+        | nord.vert -> NORD
+    ),
+    EST = (
+        est.{ ActionsVoiture } -> EST
+        | ouest.vert -> EST_OUEST
+        | est.rouge -> CONTROLE_EST_X
+    ),
+    EST_OUEST = (
+        est.{ continue, tourneDroite } -> EST_OUEST 
+        | ouest.rouge -> EST 
+        | est.rouge -> OUEST
+    ),
+    OUEST = (
+        est.vert -> EST_OUEST 
+        | ouest.rouge -> CONTROLE_EST_X
+    ),
+    SUD = ( sud.rouge -> CONTROLE_EST_X | nord.vert -> NORD_SUD ),
+    NORD = ( nord.rouge -> CONTROLE_EST_X | sud.vert -> NORD_SUD ),
+    NORD_SUD = ( sud.rouge -> NORD | nord.rouge -> SUD ).
+
+property CONTROLE_OUEST_X = (
+        est.vert -> EST
+        | ouest.vert -> OUEST
+        | sud.vert -> SUD
+        | nord.vert -> NORD
+    ),
+    EST = (
+        ouest.vert -> EST_OUEST
+        | est.rouge -> CONTROLE_OUEST_X
+    ),
+    EST_OUEST = (
+        ouest.{ continue, tourneDroite } -> EST_OUEST 
+        | ouest.rouge -> EST 
+        | est.rouge -> OUEST
+    ),
+    OUEST = (
+        ouest.{ ActionsVoiture } -> OUEST
+        | est.vert -> EST_OUEST 
+        | ouest.rouge -> CONTROLE_OUEST_X
+    ),
+    SUD = ( sud.rouge -> CONTROLE_OUEST_X | nord.vert -> NORD_SUD ),
+    NORD = ( nord.rouge -> CONTROLE_OUEST_X | sud.vert -> NORD_SUD ),
+    NORD_SUD = ( sud.rouge -> NORD | nord.rouge -> SUD ).
+
+property CONTROLE_SUD_X = (
+        est.vert -> EST
+        | ouest.vert -> OUEST
+        | sud.vert -> SUD
+        | nord.vert -> NORD
+    ),
+    SUD = (
+        sud.{ ActionsVoiture } -> SUD
+        | sud.rouge -> CONTROLE_SUD_X
+        | nord.vert -> NORD_SUD
+    ),
+    NORD = (
+        nord.rouge -> CONTROLE_SUD_X
+        | sud.vert -> NORD_SUD
+    ),
+    NORD_SUD = (
+        sud.{ continue, tourneDroite } -> NORD_SUD
+        | sud.rouge -> NORD
+        | nord.rouge -> SUD
+    ),
+    EST = ( ouest.vert -> EST_OUEST | est.rouge -> CONTROLE_SUD_X),
+    OUEST = ( est.vert -> EST_OUEST | ouest.rouge -> CONTROLE_SUD_X),
+    EST_OUEST = ( ouest.rouge -> EST | est.rouge -> OUEST).
+
+property CONTROLE_NORD_X = (
+        est.vert -> EST
+        | ouest.vert -> OUEST
+        | sud.vert -> SUD
+        | nord.vert -> NORD
+    ),
+    SUD = (
+        sud.rouge -> CONTROLE_NORD_X
+        | nord.vert -> NORD_SUD
+    ),
+    NORD = (
+        nord.{ ActionsVoiture } -> NORD
+        | nord.rouge -> CONTROLE_NORD_X
+        | sud.vert -> NORD_SUD
+    ),
+    NORD_SUD = (
+        nord.{ continue, tourneDroite } -> NORD_SUD
+        | sud.rouge -> NORD
+        | nord.rouge -> SUD
+    ),
+    EST = ( ouest.vert -> EST_OUEST | est.rouge -> CONTROLE_NORD_X),
+    OUEST = ( est.vert -> EST_OUEST | ouest.rouge -> CONTROLE_NORD_X),
+    EST_OUEST = ( ouest.rouge -> EST | est.rouge -> OUEST).
+
+||TEST4 = ( TEST3 || CONTROLE_EST_X || CONTROLE_OUEST_X || CONTROLE_SUD_X || CONTROLE_NORD_X ).
+
+
+// Question 8
+// progress PIETON_PEUT_TRAVERSER = { traverse }
+
+// progress EST_AVANCE = { est.continue }
+// progress EST_GAUCHE = { est.tourneGauche }
+// progress EST_DROITE = { est.tourneDroite }
+
+// progress OUEST_AVANCE = { ouest.continue }
+// progress OUEST_GAUCHE = { ouest.tourneGauche }
+// progress OUEST_DROITE = { ouest.tourneDroite }
+
+// progress SUD_AVANCE = { sud.continue }
+// progress SUD_GAUCHE = { sud.tourneGauche }
+// progress SUD_DROITE = { sud.tourneDroite }
+
+// progress NORD_AVANCE = { nord.continue }
+// progress NORD_GAUCHE = { nord.tourneGauche }
+// progress NORD_DROITE = { nord.tourneDroite }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -175,10 +540,95 @@
 /* de progrès.                                                               */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+/*
+    Nous avons utilisé les bouts de spécification suggérés, ainsi que les
+    synchronisations suggérées. Par ailleurs, nous empêchons à une voiture
+    d'arriver dans l'intersection en croix (X) à partir de l'intersection en T
+    après avoir tourné à droite (ce qui signifierait que la voiture est arrivée
+    du NORD de T, ce qui est impossible). 
+*/
 
+VOITURE_SYNC = ({approcheC, approcheG, approcheD} -> VSYNC),
+VSYNC = (continue -> finitC -> VOITURE_SYNC |
+    tourneGauche -> finitG -> VOITURE_SYNC |
+    tourneDroite -> finitD -> VOITURE_SYNC |
+    attend -> VSYNC ).
 
+||VOITURES_SYNC1 = [1].DirectionsT:VOITURE_SYNC.
 
+||VOITURES_SYNC2 = [2].DirectionsX:VOITURE_SYNC.
 
+EMPECHE_APPROCHE_INVALIDE = STOP + {[2].est.approcheD}.
 
+||VOITURES_SYNC = (VOITURES_SYNC1 || VOITURES_SYNC2 || EMPECHE_APPROCHE_INVALIDE) /
+    {
+        [2].est.approcheC/[1].est.finitC,
+        [2].est.approcheG/[1].sud.finitG,
+        [1].ouest.approcheC/[2].ouest.finitC,
+        [1].ouest.approcheD/[2].sud.finitD,
+        [1].ouest.approcheG/[2].nord.finitG
+    }.
 
+/*
+    Dans le processus INTERSECTIONS_SYNC, nous composons en parallèle les
+    voitures SYNC, l'intersection en T et l'intersection en croix (X), et nous
+    effectuons des renommages afin de synchroniser les lumières. Par exemple,
+    [1].est.vert et [2].est.vert deviennent simplement est.vert, ce qui force
+    les lumières à devenir vertes en même temps. Par ailleurs, les actions du
+    NORD telles que [2].nord.vert deviennent simplement nord.vert.
+*/
 
+||INTERSECTIONS_SYNC = ( VOITURES_SYNC || [1]:INTERSECTION || [2]:INTERSECTION_X ) /
+    {
+        forall[i:1..2][dir:DirectionsT][act:{rouge, vert}]
+        {[dir].[act]/[i].[dir].[act], nord.[act]/[2].nord.[act]}
+    }.
+
+/*
+    Le processus TEST5 permet de valider l'entièreté du système, avec les deux
+    intersections et toutes les propriétés de sûreté. Il comprend donc
+    INTERSECTIONS_SYNC, TEST2 et TEST4, ainsi que des PIETONS dans chaque
+    intersection. Nous procécons aux mêmes renommages que dans INTERSECTIONS_SYNC
+    afin de synchroniser aussi TEST2 et TEST4.
+*/
+
+||TEST5 = ( INTERSECTIONS_SYNC || [1..2]:PIETONS || [1]:TEST2 || [2]:TEST4 ) /
+    {
+        forall[i:1..2][dir:DirectionsT][act:{rouge, vert}]
+        {[dir].[act]/[i].[dir].[act], nord.[act]/[2].nord.[act]}
+    }.
+
+/*
+    Les propriétés de progrès suivent les mêmes principes que pour les
+    questions précédentes. Chaque action correspond à un singleton,
+    et les deux intersections sont validées séparément.
+*/
+
+progress PIETON_PEUT_TRAVERSER = { [1].traverse }
+
+progress EST_AVANCE = { [1].est.continue }
+progress EST_GAUCHE = { [1].est.tourneGauche }
+
+progress OUEST_AVANCE = { [1].ouest.continue }
+progress OUEST_DROITE = { [1].ouest.tourneDroite }
+
+progress SUD_GAUCHE = { [1].sud.tourneGauche }
+progress SUD_DROITE = { [1].sud.tourneDroite }
+
+progress X_PIETON_PEUT_TRAVERSER = { [2].traverse }
+
+progress X_EST_AVANCE = { [2].est.continue }
+progress X_EST_GAUCHE = { [2].est.tourneGauche }
+progress X_EST_DROITE = { [2].est.tourneDroite }
+
+progress X_OUEST_AVANCE = { [2].ouest.continue }
+progress X_OUEST_GAUCHE = { [2].ouest.tourneGauche }
+progress X_OUEST_DROITE = { [2].ouest.tourneDroite }
+
+progress X_SUD_AVANCE = { [2].sud.continue }
+progress X_SUD_GAUCHE = { [2].sud.tourneGauche }
+progress X_SUD_DROITE = { [2].sud.tourneDroite }
+
+progress X_NORD_AVANCE = { [2].nord.continue }
+progress X_NORD_GAUCHE = { [2].nord.tourneGauche }
+progress X_NORD_DROITE = { [2].nord.tourneDroite }
