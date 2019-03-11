@@ -116,10 +116,10 @@ VERT = ( rouge -> ROUGE ).
 
 /*
     Nous utilisons un processus local pour chacun des "états" possibles des
-    lumières. Elles peuvent êtres toutes rouges, ou une d'entre elles est verte
+    lumières. Elles peuvent être toutes rouges, ou une d'elles est verte
     et les autres sont rouges, ou l'est et l'ouest sont vertes en même temps.
-    Les pirétons peuvent seulement traverser lorsque toutes les lumières sont
-    rouges. Lorsqu'elles sont toutes rouges, l'une d'entre elles peut
+    Les piétons peuvent seulement traverser lorsque toutes les lumières sont
+    rouges. Aussi, lorsqu'elles sont toutes rouges, l'une d'entre elles peut
     devenir verte. Lorsqu'une lumière est verte, les actions de la voiture
     associée à cette lumière sont possibles, et la lumière peut aussi redevenir
     rouge (on retourne alors à l'état de départ, où toutes les lumières sont
@@ -320,7 +320,7 @@ property CONTROLE_SUD = ( sud.vert -> SUD | est.vert -> EST | ouest.vert -> OUES
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
-    Les idées derrière cette modélisation sont similaires à celle pour
+    Les idées derrières cette modélisation sont similaires à celles pour
     l'intersection en T. L'ensemble des directions comporte une direction de
     plus, le nord, ce qui fait qu'il faut créer deux nouveaux processus
     VOITURES_X et LUMIERES_X qui utilisent ces directions. Par ailleurs, le
