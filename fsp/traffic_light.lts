@@ -115,10 +115,10 @@ VERT = ( rouge -> ROUGE ).
 
 /*
     Nous utilisons un processus local pour chacun des "états" possibles des
-    lumières. Elles peuvent êtres toutes rouges, ou une d'entre elles est verte
+    lumières. Elles peuvent être toutes rouges, ou une d'elles est verte
     et les autres sont rouges, ou l'est et l'ouest sont vertes en même temps.
-    Les pirétons peuvent seulement traverser lorsque toutes les lumières sont
-    rouges. Sinon, lorsqu'elles sont toutes rouges, l'une d'entre elles peut
+    Les piétons peuvent seulement traverser lorsque toutes les lumières sont
+    rouges. Sinon, lorsqu'elles sont toutes rouges, l'une d'elles peut
     devenir verte. Lorsqu'une lumière est verte, les actions de la voiture
     associée à cette lumière sont possibles, et la lumière peut aussi redevenir
     rouge (on retourne alors à l'état de départ, où toutes les lumières sont
@@ -308,7 +308,7 @@ continuer ou seulement tourner à gauche. Or, on veut pouvoir faire les deux.
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
-    Les idées derrière cette modélisation sont similaires à celle pour
+    Les idées derrières cette modélisation sont similaires à celles pour
     l'intersection en T. L'ensemble des directions comporte une direction de
     plus, le nord, ce qui fait qu'il faut créer deux nouveaux processus
     VOITURES_X et LUMIERES_X. Par ailleurs, le principe de fonctionnement
@@ -527,14 +527,14 @@ property CONTROLE_NORD_X = (
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
-    Ici on synchronise les deux intersections avec les actions approcheC, si une voiture            
-    passe d'une intersection à une autre en faisant l'action de continuer, approcheG,           
+    Ici on synchronise les deux intersections avec les actions approcheC si une voiture            
+    passe d'une intersection à une autre en faisant l'action de continuer, approcheG           
     si une voiture passe d'une intersection à l'autre en tournant à gauche et approcheD            
     si une voiture passe d'une intersection à l'autre en tournant à droite. Les renommages        
-    effectués sont pour précisés le lien entre les voitures provenant d'une intersection et         
+    effectués sont pour préciser le lien entre les voitures provenant d'une intersection et         
     s'engageant dans une autre. INTERSECTIONS_SYNC nous permet de synchroniser les lumières         
-    des deux intersections (lorsque la luumière Nord est verte dans l'intersection en croix,     
-    celle de l'intersection en T l'est également (même chose pour toutes les autres directions.    
+    des deux intersections. Lorsque la lumière Nord est verte dans l'intersection en croix,     
+    celle de l'intersection en T l'est également. C'est de même pour toutes les autres directions.    
     Finalement dans TEST5 on parallélise le dernier processus défini avec PIETONS, TEST1, TEST2,    
     TEST3 et TEST4 afin de conserver ce qui a été défini précédemment
 */
